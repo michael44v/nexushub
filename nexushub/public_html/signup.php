@@ -14,11 +14,14 @@ if(isset($_POST['email'])) {
     $m = $_POST['email'];
     $u = $_POST['username'];
     $chk = $conn->query("select * from user_details where uemail='$m'");
-    if($chk->num_rows > 0) { $emailError = true; }
+    if($chk && $chk->num_rows > 0) { $emailError = true; }
     else {
-      $put = $conn->query("insert into user_details(uname,uemail,upwd) values('$u','$m','$pwd')");
+      $put = $conn->query("insert into user_details(uname,uemail,upwd,kyc_status) values('$u','$m','$pwd','Not Submitted')");
       if($put) { $success = true; }
-      $conn->query("insert into bal(uid,bal) values('$conn->insert_id','0.00')");
+      $new_id = $conn->insert_id;
+      if ($new_id) {
+          $conn->query("insert into bal(uid,bal) values('$new_id','0.00')");
+      }
     }
   }
 }
@@ -30,24 +33,25 @@ if(isset($_POST['email'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Wallet — NexusHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0b0d11;
-      --surface: #13161d;
-      --surface2: #1a1e28;
-      --border: rgba(255,255,255,0.07);
+      --bg: #07080a;
+      --surface: #11141c;
+      --surface2: #171b26;
+      --border: rgba(255,255,255,0.08);
       --accent: #f0a500;
+      --accent-hover: #ffb71a;
       --accent-dim: rgba(240,165,0,0.12);
       --accent-glow: rgba(240,165,0,0.25);
-      --text: #e8eaf0;
-      --muted: #6b7280;
-      --error-bg: rgba(239,68,68,0.08);
+      --text: #f0f2f5;
+      --muted: #808a9d;
+      --error-bg: rgba(239,68,68,0.1);
       --error-border: rgba(239,68,68,0.3);
       --error-text: #f87171;
-      --success-bg: rgba(34,197,94,0.08);
+      --success-bg: rgba(34,197,94,0.1);
       --success-border: rgba(34,197,94,0.3);
       --success-text: #4ade80;
     }
@@ -65,7 +69,7 @@ if(isset($_POST['email'])) {
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
       position: relative;
       overflow-x: hidden;
     }
@@ -75,9 +79,9 @@ if(isset($_POST['email'])) {
       content: '';
       position: fixed; inset: 0;
       background-image:
-        linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
+        linear-gradient(rgba(240,165,0,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,165,0,0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
       pointer-events: none;
       z-index: 0;
     }
@@ -86,9 +90,9 @@ if(isset($_POST['email'])) {
     body::after {
       content: '';
       position: fixed;
-      top: -200px; right: -200px;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(240,165,0,0.06) 0%, transparent 65%);
+      top: -250px; right: -250px;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(240,165,0,0.08) 0%, transparent 65%);
       pointer-events: none;
       z-index: 0;
     }
@@ -103,46 +107,46 @@ if(isset($_POST['email'])) {
     /* Brand header */
     .brand {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .brand-logo {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 52px; height: 52px;
-      background: var(--accent-dim);
-      border: 1px solid rgba(240,165,0,0.2);
-      border-radius: 14px;
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, rgba(240,165,0,0.2) 0%, rgba(240,165,0,0.05) 100%);
+      border: 1px solid rgba(240,165,0,0.3);
+      border-radius: 16px;
       margin-bottom: 1rem;
+      box-shadow: 0 0 20px rgba(240,165,0,0.15);
     }
-
-    .brand-logo svg { width: 24px; height: 24px; }
 
     .brand h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--text);
+      color: #ffffff;
     }
 
     .brand p {
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       color: var(--muted);
       margin-top: 0.35rem;
-      font-weight: 300;
+      font-weight: 400;
     }
 
     /* Card */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      padding: 2.25rem 2rem;
       box-shadow:
-        0 0 0 1px rgba(255,255,255,0.02),
-        0 32px 64px rgba(0,0,0,0.5);
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 32px 64px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
       animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
     }
 
@@ -157,7 +161,7 @@ if(isset($_POST['email'])) {
       align-items: flex-start;
       gap: 0.65rem;
       padding: 0.85rem 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 0.875rem;
       line-height: 1.5;
       margin-bottom: 1.5rem;
@@ -175,29 +179,24 @@ if(isset($_POST['email'])) {
       color: var(--success-text);
     }
 
-    .alert-icon {
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
+    .alert-icon { flex-shrink: 0; margin-top: 1px; }
 
-    .alert a { color: inherit; font-weight: 500; }
+    .alert a { color: inherit; font-weight: 600; text-decoration: underline; }
 
     /* Form */
-    .form-group { margin-bottom: 1.35rem; }
+    .form-group { margin-bottom: 1.25rem; }
 
     .form-label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
-    .input-wrap {
-      position: relative;
-    }
+    .input-wrap { position: relative; }
 
     .input-icon {
       position: absolute;
@@ -212,7 +211,7 @@ if(isset($_POST['email'])) {
       width: 100%;
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
@@ -222,46 +221,133 @@ if(isset($_POST['email'])) {
       -webkit-appearance: none;
     }
 
-    .form-input::placeholder { color: var(--muted); }
+    .form-input::placeholder { color: #4a5264; }
 
     .form-input:focus {
-      border-color: rgba(240,165,0,0.4);
+      border-color: rgba(240,165,0,0.5);
       background: rgba(240,165,0,0.03);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    /* Submit */
+    /* Captcha Component */
+    .captcha-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .captcha-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .captcha-canvas-wrap {
+      flex-shrink: 0;
+      background: #f3f4f6;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    #captchaCanvas {
+      display: block;
+      border-radius: 6px;
+    }
+
+    .captcha-input-wrap {
+      flex: 1;
+    }
+
+    .captcha-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.75rem 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .captcha-input:focus {
+      border-color: rgba(240,165,0,0.5);
+    }
+
+    .captcha-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .captcha-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      padding: 0;
+    }
+
+    .captcha-btn:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    /* Submit Button */
     .btn-submit {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.95rem 1rem;
       background: var(--accent);
-      color: #0b0d11;
+      color: #07080a;
       font-family: 'Syne', sans-serif;
       font-size: 0.95rem;
       font-weight: 700;
       letter-spacing: 0.03em;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       margin-top: 0.5rem;
-      box-shadow: 0 4px 24px rgba(240,165,0,0.2);
+      box-shadow: 0 4px 20px rgba(240,165,0,0.25);
     }
 
-    .btn-submit:hover {
-      opacity: 0.92;
+    .btn-submit:hover:not(:disabled) {
+      background: var(--accent-hover);
       transform: translateY(-1px);
-      box-shadow: 0 8px 32px rgba(240,165,0,0.3);
+      box-shadow: 0 8px 28px rgba(240,165,0,0.35);
     }
 
-    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled {
+      background: #2a2e3d;
+      color: #5c6479;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.7;
+    }
 
     /* Divider */
     .divider {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin: 1.75rem 0 1.5rem;
+      margin: 1.5rem 0;
       color: var(--muted);
       font-size: 0.8rem;
     }
@@ -283,15 +369,16 @@ if(isset($_POST['email'])) {
     .auth-footer a {
       color: var(--accent);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       transition: opacity 0.15s;
     }
 
     .auth-footer a:hover { opacity: 0.8; }
 
-    /* Responsive */
     @media (max-width: 520px) {
-      .card { padding: 2rem 1.25rem; }
+      .card { padding: 1.75rem 1.25rem; }
+      .captcha-row { flex-direction: column; align-items: stretch; }
+      .captcha-canvas-wrap { align-self: center; }
     }
   </style>
 </head>
@@ -300,7 +387,7 @@ if(isset($_POST['email'])) {
 
   <div class="brand">
     <div class="brand-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     </div>
@@ -336,10 +423,10 @@ if(isset($_POST['email'])) {
       <svg class="alert-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
       Account created successfully. Redirecting&hellip;
     </div>
-    <script>window.location.href = '/signin/success';</script>
+    <script>setTimeout(function(){ window.location.href = '/signin/success'; }, 1000);</script>
     <?php endif; ?>
 
-    <form method="post" action="/signup" novalidate>
+    <form method="post" action="/signup" id="signupForm" novalidate>
 
       <div class="form-group">
         <label class="form-label" for="email">Email Address</label>
@@ -373,7 +460,31 @@ if(isset($_POST['email'])) {
         </div>
       </div>
 
-      <button type="submit" class="btn-submit">Create Wallet</button>
+      <!-- Captcha Component -->
+      <div class="captcha-card">
+        <label class="form-label" style="margin-bottom:0.6rem;">Security Verification</label>
+        <div class="captcha-row">
+          <div class="captcha-canvas-wrap">
+            <canvas id="captchaCanvas" width="130" height="42"></canvas>
+          </div>
+          <div class="captcha-input-wrap">
+            <input type="text" id="captchaInput" class="captcha-input" placeholder="Type the numbers" autocomplete="off" />
+          </div>
+        </div>
+        <div class="captcha-actions">
+          <button type="button" class="captcha-btn" id="refreshCaptchaBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            New Code
+          </button>
+          <span style="color:var(--border);">|</span>
+          <button type="button" class="captcha-btn" id="audioCaptchaBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            Vision Impaired
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-submit" disabled>Create Wallet</button>
 
     </form>
 
@@ -383,5 +494,94 @@ if(isset($_POST['email'])) {
 
   </div>
 </div>
+
+<script>
+let currentCaptchaCode = '';
+
+function generateCaptchaNumbers() {
+  let digits = '';
+  for (let i = 0; i < 4; i++) {
+    digits += Math.floor(Math.random() * 10);
+  }
+  return digits;
+}
+
+function drawCaptcha() {
+  const canvas = document.getElementById('captchaCanvas');
+  const ctx = canvas.getContext('2d');
+  currentCaptchaCode = generateCaptchaNumbers();
+
+  // Clear canvas
+  ctx.fillStyle = '#f3f4f6';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Background noise lines
+  for (let i = 0; i < 5; i++) {
+    ctx.strokeStyle = `rgba(${Math.floor(Math.random()*150)}, ${Math.floor(Math.random()*150)}, ${Math.floor(Math.random()*150)}, 0.4)`;
+    ctx.lineWidth = 1 + Math.random();
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.stroke();
+  }
+
+  // Draw numbers
+  ctx.font = 'bold 24px "DM Sans", sans-serif';
+  ctx.textBaseline = 'middle';
+
+  const startX = 15;
+  const spacing = 26;
+
+  for (let i = 0; i < currentCaptchaCode.length; i++) {
+    const char = currentCaptchaCode[i];
+    ctx.save();
+    const x = startX + i * spacing;
+    const y = canvas.height / 2 + (Math.random() * 4 - 2);
+    const angle = (Math.random() - 0.5) * 0.3;
+
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+
+    ctx.fillStyle = `rgb(${Math.floor(Math.random()*80)}, ${Math.floor(Math.random()*80)}, ${Math.floor(Math.random()*80)})`;
+    ctx.fillText(char, 0, 0);
+    ctx.restore();
+  }
+
+  // Check validation state
+  validateCaptcha();
+}
+
+function validateCaptcha() {
+  const input = document.getElementById('captchaInput').value.trim();
+  const submitBtn = document.getElementById('submitBtn');
+  if (input === currentCaptchaCode) {
+    submitBtn.disabled = false;
+  } else {
+    submitBtn.disabled = true;
+  }
+}
+
+document.getElementById('refreshCaptchaBtn').addEventListener('click', function() {
+  document.getElementById('captchaInput').value = '';
+  drawCaptcha();
+});
+
+document.getElementById('audioCaptchaBtn').addEventListener('click', function() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const spoken = currentCaptchaCode.split('').join(' ');
+    const utterance = new SpeechSynthesisUtterance('Verification code is ' + spoken);
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert('Code: ' + currentCaptchaCode);
+  }
+});
+
+document.getElementById('captchaInput').addEventListener('input', validateCaptcha);
+
+// Initialize on page load
+window.addEventListener('load', drawCaptcha);
+</script>
 </body>
 </html>

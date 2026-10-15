@@ -5,6 +5,11 @@ CREATE TABLE IF NOT EXISTS `user_details` (
   `uname` VARCHAR(100) NOT NULL,
   `uemail` VARCHAR(150) NOT NULL UNIQUE,
   `upwd` VARCHAR(255) NOT NULL,
+  `kyc_status` VARCHAR(50) DEFAULT 'Not Submitted',
+  `kyc_doc_type` VARCHAR(50) DEFAULT NULL,
+  `kyc_doc_url` VARCHAR(500) DEFAULT NULL,
+  `kyc_submitted_at` TIMESTAMP NULL DEFAULT NULL,
+  `kyc_rejection_reason` TEXT DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

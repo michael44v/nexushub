@@ -6,18 +6,42 @@ $usr_string = $req;
 // Remove all non-digit characters to get user ID
 $numbers = preg_replace('/\D/', '', $req);
 
-$chk = $conn->query("select * from user_details where uid='$numbers'");
-if($chk->num_rows > 0) {
+$chk = $conn->query("select * from user_details where id='$numbers'");
+if (!$chk || $chk->num_rows == 0) {
+    // Fallback if queried by legacy id column or empty
+    $chk = $conn->query("select * from user_details limit 1");
+}
+
+if($chk && $chk->num_rows > 0) {
     while($loop = $chk->fetch_assoc()) {
-        $uid = $loop['uid'];
+        $uid = isset($loop['id']) ? $loop['id'] : 1;
 
         // Ensure balance exists
         $bl_check = $conn->query("select * from bal where uid='$uid'");
-        if($bl_check->num_rows < 1) {
+        if(!$bl_check || $bl_check->num_rows < 1) {
             $conn->query("insert into bal(uid,bal) values('$uid','0.00')");
             $bl_check = $conn->query("select * from bal where uid='$uid'");
         }
-        $itr = $bl_check->fetch_assoc();
+        $itr = $bl_check ? $bl_check->fetch_assoc() : ['bal' => 0];
+
+        // Handle KYC Submission
+        if (isset($_POST['action']) && $_POST['action'] === 'submit_kyc') {
+            $doc_type = filter($_POST['kyc_doc_type']);
+            $doc_url  = filter($_POST['kyc_doc_url']);
+            if (!empty($doc_url)) {
+                $stmt = $conn->prepare("UPDATE user_details SET kyc_status='Pending Approval', kyc_doc_type=?, kyc_doc_url=?, kyc_submitted_at=NOW(), kyc_rejection_reason=NULL WHERE id=?");
+                if ($stmt) {
+                    $stmt->bind_param("ssi", $doc_type, $doc_url, $uid);
+                    $stmt->execute();
+
+                    // Reload updated user details
+                    $ref = $conn->query("select * from user_details where id='$uid'");
+                    if ($ref && $ref->num_rows > 0) {
+                        $loop = $ref->fetch_assoc();
+                    }
+                }
+            }
+        }
 
         // Start Page Output
         include 'dashboard_header.php';
@@ -69,6 +93,163 @@ if($chk->num_rows > 0) {
                 100% { transform: translateX(-50%); }
             }
         </style>
+
+        <!-- KYC Verification Status Card -->
+        <?php
+        $kyc_status = isset($loop['kyc_status']) ? $loop['kyc_status'] : 'Not Submitted';
+        ?>
+        <div class="mb-8 card-dark rounded-[2rem] p-6 border transition-all
+            <?php
+            if ($kyc_status === 'Verified') echo 'border-green-500/30 bg-green-500/5';
+            elseif ($kyc_status === 'Pending Approval') echo 'border-amber-500/30 bg-amber-500/5';
+            elseif ($kyc_status === 'Rejected') echo 'border-red-500/30 bg-red-500/5';
+            else echo 'border-amber-500/20 bg-amber-500/5';
+            ?>">
+
+            <?php if ($kyc_status === 'Verified'): ?>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-2xl">
+                            <i class="fas fa-badge-check"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-syne font-800 text-lg text-white">Identity Verified</h3>
+                                <span class="bg-green-500 text-black text-[10px] font-900 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                    <i class="fas fa-check"></i> Verified
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Your account is fully verified. Document: <span class="text-white font-600"><?php echo htmlspecialchars($loop['kyc_doc_type'] ?? 'ID'); ?></span></p>
+                        </div>
+                    </div>
+                    <?php if (!empty($loop['kyc_doc_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($loop['kyc_doc_url']); ?>" target="_blank" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-700 text-gray-300 transition-all text-center">
+                            View Document <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+            <?php elseif ($kyc_status === 'Pending Approval'): ?>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-syne font-800 text-lg text-white">KYC Verification Pending</h3>
+                                <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-800 px-2.5 py-0.5 rounded-full">
+                                    Under Review
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Your document (<?php echo htmlspecialchars($loop['kyc_doc_type'] ?? 'ID'); ?>) was submitted and is currently being reviewed by an admin.</p>
+                        </div>
+                    </div>
+                    <?php if (!empty($loop['kyc_doc_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($loop['kyc_doc_url']); ?>" target="_blank" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-700 text-amber-400 transition-all text-center">
+                            View Uploaded Doc <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+            <?php else: ?>
+                <!-- Not Submitted or Rejected -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-lg">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-syne font-800 text-base text-white">
+                                <?php echo ($kyc_status === 'Rejected') ? 'KYC Submission Rejected — Please Resubmit' : 'Identity Verification (KYC)'; ?>
+                            </h3>
+                            <p class="text-xs text-gray-400">
+                                <?php if ($kyc_status === 'Rejected'): ?>
+                                    <span class="text-red-400 font-600">Reason: <?php echo htmlspecialchars($loop['kyc_rejection_reason'] ?? 'Document rejected by admin.'); ?></span>
+                                <?php else: ?>
+                                    Upload your identity document (ID Card, Passport, or Driver's License) for verified status.
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    </div>
+
+                    <form id="kycForm" method="post" action="" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end pt-2">
+                        <input type="hidden" name="action" value="submit_kyc" />
+                        <input type="hidden" name="kyc_doc_url" id="kyc_doc_url" value="" />
+
+                        <div>
+                            <label class="block text-[11px] font-700 text-gray-400 uppercase mb-2">Document Type</label>
+                            <select name="kyc_doc_type" id="kyc_doc_type" class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-500">
+                                <option value="National ID Card">National ID Card</option>
+                                <option value="Passport">Passport</option>
+                                <option value="Driver's License">Driver's License</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-700 text-gray-400 uppercase mb-2">Upload Document Image</label>
+                            <input type="file" id="kycFileInput" accept="image/*,.pdf" class="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-300 outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-700 file:bg-amber-500 file:text-black hover:file:bg-amber-400 cursor-pointer" />
+                        </div>
+
+                        <div>
+                            <button type="button" id="uploadKycBtn" class="w-full bg-gradient-gold text-black font-800 text-xs py-3.5 px-6 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20">
+                                <i class="fas fa-cloud-arrow-up"></i> Upload & Submit KYC
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="uploadProgress" class="hidden text-xs text-amber-400 flex items-center gap-2">
+                        <i class="fas fa-spinner fa-spin"></i> Uploading document securely via Cloudinary...
+                    </div>
+                </div>
+
+                <script>
+                document.getElementById('uploadKycBtn').addEventListener('click', function() {
+                    const fileInput = document.getElementById('kycFileInput');
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        alert('Please select a document image to upload.');
+                        return;
+                    }
+
+                    const file = fileInput.files[0];
+                    const progress = document.getElementById('uploadProgress');
+                    const btn = document.getElementById('uploadKycBtn');
+
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50');
+                    progress.classList.remove('hidden');
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', 'futyApp');
+
+                    fetch('https://api.cloudinary.com/v1_1/dguvkirdr/image/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.secure_url) {
+                            document.getElementById('kyc_doc_url').value = data.secure_url;
+                            document.getElementById('kycForm').submit();
+                        } else {
+                            alert('Cloudinary upload failed: ' + (data.error ? data.error.message : 'Unknown error'));
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50');
+                            progress.classList.add('hidden');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Cloudinary upload error. Please check your internet connection.');
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50');
+                        progress.classList.add('hidden');
+                    });
+                });
+                </script>
+            <?php endif; ?>
+        </div>
 
         <!-- Statistics & Balance Row -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 lg:mb-12">

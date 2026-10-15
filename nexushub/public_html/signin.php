@@ -23,9 +23,9 @@ if(isset($_POST['email'])) {
   $pwd = filter($_POST['pwd']);
   $log = $conn->query("select * from user_details where uemail='$m' and upwd='$pwd'");
 
-  if($log->num_rows > 0) {
+  if($log && $log->num_rows > 0) {
     while($loop = $log->fetch_assoc()) {
-      $_SESSION['uid'] = $loop['uid'];
+      $_SESSION['uid'] = $loop['id'];
       $identifier = substr($loop['uname'], 0, 3);
       $redirect = $identifier . $_SESSION['uid'];
     }
@@ -42,24 +42,25 @@ if(isset($_POST['email'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign In — NexusHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0b0d11;
-      --surface: #13161d;
-      --surface2: #1a1e28;
-      --border: rgba(255,255,255,0.07);
+      --bg: #07080a;
+      --surface: #11141c;
+      --surface2: #171b26;
+      --border: rgba(255,255,255,0.08);
       --accent: #f0a500;
+      --accent-hover: #ffb71a;
       --accent-dim: rgba(240,165,0,0.12);
       --accent-glow: rgba(240,165,0,0.25);
-      --text: #e8eaf0;
-      --muted: #6b7280;
-      --error-bg: rgba(239,68,68,0.08);
+      --text: #f0f2f5;
+      --muted: #808a9d;
+      --error-bg: rgba(239,68,68,0.1);
       --error-border: rgba(239,68,68,0.3);
       --error-text: #f87171;
-      --success-bg: rgba(34,197,94,0.08);
+      --success-bg: rgba(34,197,94,0.1);
       --success-border: rgba(34,197,94,0.3);
       --success-text: #4ade80;
     }
@@ -77,7 +78,7 @@ if(isset($_POST['email'])) {
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
       position: relative;
       overflow-x: hidden;
     }
@@ -86,9 +87,9 @@ if(isset($_POST['email'])) {
       content: '';
       position: fixed; inset: 0;
       background-image:
-        linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
+        linear-gradient(rgba(240,165,0,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,165,0,0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
       pointer-events: none;
       z-index: 0;
     }
@@ -96,9 +97,9 @@ if(isset($_POST['email'])) {
     body::after {
       content: '';
       position: fixed;
-      bottom: -200px; left: -200px;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(240,165,0,0.05) 0%, transparent 65%);
+      bottom: -250px; left: -250px;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(240,165,0,0.08) 0%, transparent 65%);
       pointer-events: none;
       z-index: 0;
     }
@@ -112,42 +113,45 @@ if(isset($_POST['email'])) {
 
     .brand {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .brand-logo {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 52px; height: 52px;
-      background: var(--accent-dim);
-      border: 1px solid rgba(240,165,0,0.2);
-      border-radius: 14px;
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, rgba(240,165,0,0.2) 0%, rgba(240,165,0,0.05) 100%);
+      border: 1px solid rgba(240,165,0,0.3);
+      border-radius: 16px;
       margin-bottom: 1rem;
+      box-shadow: 0 0 20px rgba(240,165,0,0.15);
     }
 
     .brand h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       font-weight: 800;
       letter-spacing: -0.02em;
+      color: #ffffff;
     }
 
     .brand p {
-      font-size: 0.875rem;
+      font-size: 0.9rem;
       color: var(--muted);
       margin-top: 0.35rem;
-      font-weight: 300;
+      font-weight: 400;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      padding: 2.25rem 2rem;
       box-shadow:
-        0 0 0 1px rgba(255,255,255,0.02),
-        0 32px 64px rgba(0,0,0,0.5);
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 32px 64px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
       animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
     }
 
@@ -158,7 +162,7 @@ if(isset($_POST['email'])) {
 
     .card-heading {
       font-family: 'Syne', sans-serif;
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.35rem;
@@ -167,8 +171,8 @@ if(isset($_POST['email'])) {
     .card-sub {
       font-size: 0.875rem;
       color: var(--muted);
-      margin-bottom: 1.75rem;
-      font-weight: 300;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
     }
 
     .alert {
@@ -176,7 +180,7 @@ if(isset($_POST['email'])) {
       align-items: flex-start;
       gap: 0.65rem;
       padding: 0.85rem 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 0.875rem;
       line-height: 1.5;
       margin-bottom: 1.5rem;
@@ -196,16 +200,16 @@ if(isset($_POST['email'])) {
 
     .alert-icon { flex-shrink: 0; margin-top: 1px; }
 
-    .form-group { margin-bottom: 1.35rem; }
+    .form-group { margin-bottom: 1.25rem; }
 
     .form-label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
     .input-wrap { position: relative; }
@@ -223,7 +227,7 @@ if(isset($_POST['email'])) {
       width: 100%;
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
@@ -233,10 +237,10 @@ if(isset($_POST['email'])) {
       -webkit-appearance: none;
     }
 
-    .form-input::placeholder { color: var(--muted); }
+    .form-input::placeholder { color: #4a5264; }
 
     .form-input:focus {
-      border-color: rgba(240,165,0,0.4);
+      border-color: rgba(240,165,0,0.5);
       background: rgba(240,165,0,0.03);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
@@ -247,7 +251,7 @@ if(isset($_POST['email'])) {
       font-size: 0.8rem;
       color: var(--muted);
       text-decoration: none;
-      margin-top: -0.9rem;
+      margin-top: -0.75rem;
       margin-bottom: 1.35rem;
       transition: color 0.15s;
     }
@@ -256,24 +260,24 @@ if(isset($_POST['email'])) {
 
     .btn-submit {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.95rem 1rem;
       background: var(--accent);
-      color: #0b0d11;
+      color: #07080a;
       font-family: 'Syne', sans-serif;
       font-size: 0.95rem;
       font-weight: 700;
       letter-spacing: 0.03em;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(240,165,0,0.2);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(240,165,0,0.25);
     }
 
     .btn-submit:hover {
-      opacity: 0.92;
+      background: var(--accent-hover);
       transform: translateY(-1px);
-      box-shadow: 0 8px 32px rgba(240,165,0,0.3);
+      box-shadow: 0 8px 28px rgba(240,165,0,0.35);
     }
 
     .btn-submit:active { transform: translateY(0); }
@@ -282,7 +286,7 @@ if(isset($_POST['email'])) {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin: 1.75rem 0 1.5rem;
+      margin: 1.5rem 0;
       color: var(--muted);
       font-size: 0.8rem;
     }
@@ -303,14 +307,14 @@ if(isset($_POST['email'])) {
     .auth-footer a {
       color: var(--accent);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       transition: opacity 0.15s;
     }
 
     .auth-footer a:hover { opacity: 0.8; }
 
     @media (max-width: 480px) {
-      .card { padding: 2rem 1.25rem; }
+      .card { padding: 1.75rem 1.25rem; }
     }
   </style>
 </head>
@@ -324,7 +328,7 @@ if(isset($_POST['email'])) {
 
   <div class="brand">
     <div class="brand-logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     </div>

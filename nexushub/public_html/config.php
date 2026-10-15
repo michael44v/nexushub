@@ -37,8 +37,15 @@ if ($conn->connect_error) {
     };
 }
 else {
-    //echo "Connected successfully";
-
+    // Ensure KYC columns exist
+    $checkCol = $conn->query("SHOW COLUMNS FROM `user_details` LIKE 'kyc_status'");
+    if ($checkCol && $checkCol->num_rows == 0) {
+        $conn->query("ALTER TABLE `user_details` ADD `kyc_status` VARCHAR(50) DEFAULT 'Not Submitted'");
+        $conn->query("ALTER TABLE `user_details` ADD `kyc_doc_type` VARCHAR(50) DEFAULT NULL");
+        $conn->query("ALTER TABLE `user_details` ADD `kyc_doc_url` VARCHAR(500) DEFAULT NULL");
+        $conn->query("ALTER TABLE `user_details` ADD `kyc_submitted_at` TIMESTAMP NULL DEFAULT NULL");
+        $conn->query("ALTER TABLE `user_details` ADD `kyc_rejection_reason` TEXT DEFAULT NULL");
+    }
 }
 function filter($input) {
 	$input = trim($input);

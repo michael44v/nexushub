@@ -66,6 +66,9 @@ else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $
         case 'user_management':
             include 'user_management.php';
             break;
+        case 'admin_kyc':
+            include 'admin_kyc.php';
+            break;
         case 'about':
                 include 'about.php';
             break;
