@@ -35,6 +35,9 @@ else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $
     $req = $matches[1]; 
     include 'admin_deposits.php';
 }
+else if (preg_match('/^admin\/secured\/(.*)$/', $request, $matches)) {
+    include 'admin.php';
+}
  else {
     switch ($request) {
         case '':
