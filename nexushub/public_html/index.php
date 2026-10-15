@@ -11,27 +11,27 @@ if (preg_match('/^signin\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
     include 'signin.php';
 }
 else if (preg_match('/^dashboard\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'dashboard.php';
 }
 else if (preg_match('/^web\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'web.php';
 }
 else if (preg_match('/^support\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'support.php';
 }
 else if (preg_match('/^withdraw\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'withdraw.php';
 }
 else if (preg_match('/^history\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'history.php';
 }
 else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
-    $req = $matches[1]; 
+    $req = $matches[1];
     include 'admin_deposits.php';
 }
  else {
@@ -60,8 +60,8 @@ else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $
              case 'profits':
                 include 'profits.php';
                break;
-        
-     
+
+
         case 'user_management':
             include 'user_management.php';
             break;
