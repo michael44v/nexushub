@@ -3,6 +3,7 @@
 
 
 $request = $_SERVER['REQUEST_URI'];
+$request = parse_url($request, PHP_URL_PATH);
 $request = trim($request, '/');
 
 // Handle dynamic routes like /post/123alpha
