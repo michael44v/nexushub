@@ -3,7 +3,7 @@
 if(isset($_POST['pft'])) {
 	$user_to_add = $_POST['uid'];
 	$amount_add = $_POST['pft'];
-	
+
 
 	//get user bal first
 
@@ -13,7 +13,7 @@ if(isset($_POST['pft'])) {
 		if($get_prev_bal->num_rows>0) {
 			while($tr=$get_prev_bal->fetch_assoc()) {
 
-						
+
 						$old = $tr['bal'];
             $new = $tr['bal']+$amount_add;
 	$update_bal= $conn->query("update bal set bal='$new' where uid='$user_to_add'");
@@ -22,11 +22,11 @@ if($update_bal) {
 
 <script>//window.location.reload();</script><?php
 }
-					}	
+					}
 				}
 //$update = $conn->query("update transactions set txn_status='approved' where uid='$user_to_approve' and txn_id='$trans_id'");
 
-				
+
 
 
 
@@ -44,7 +44,7 @@ if($update_bal) {
 </a>
 
 <a href='/admin_deposits/new'>
-    
+
     <style> .badge { background:red; margin-top:-95%;}</style>
 <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="white"><path d="M312-146.67h336v-124.66q0-70-49-118.67t-119-48.67q-70 0-119 48.67t-49 118.67v124.66ZM193.33-80q-14.16 0-23.75-9.62-9.58-9.61-9.58-23.83 0-14.22 9.58-23.72 9.59-9.5 23.75-9.5h52v-124.66q0-67.67 36.17-124.17t97.17-84.5q-61-28.67-97.17-85.17t-36.17-124.16v-124h-52q-14.16 0-23.75-9.62-9.58-9.62-9.58-23.83 0-14.22 9.58-23.72 9.59-9.5 23.75-9.5h573.34q14.16 0 23.75 9.62 9.58 9.61 9.58 23.83 0 14.22-9.58 23.72-9.59 9.5-23.75 9.5h-52v124q0 67.66-36.17 124.16T581.33-480q61 28 97.17 84.5t36.17 124.17v124.66h52q14.16 0 23.75 9.62 9.58 9.62 9.58 23.83 0 14.22-9.58 23.72-9.59 9.5-23.75 9.5H193.33Z"/></svg>
 
@@ -52,17 +52,17 @@ if($update_bal) {
 <?php
               $sqlll = "SELECT count(txn_id) as tx FROM withdrawals";
               $ress = $conn->query($sqlll);
-              
+
               if ($ress->num_rows > 0) {
                   while($roo = $ress->fetch_assoc()) {
                       echo "<span class='badge'>".$roo["tx"]."</span>";
-                     
+
                   }
               } else {
                   echo "";
               }
     ?>
-    
+
 
 <br>
 </a>
@@ -76,7 +76,7 @@ if($update_bal) {
   <div class="content">
     <h2 style="text-align: center; color: gray;"> Admin <img src='https://static.vecteezy.com/system/resources/previews/000/290/610/non_2x/administration-vector-icon.jpg' width='35px' style='border-radius:100%; position:absolute; display:block; margin-top:-8%;  margin-left: 1%; '/>
     </h2><br>
-    
+
     <h3>Profit Adder</h3>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <table class="w3-table w3-bordered">
@@ -85,20 +85,20 @@ if($update_bal) {
       <th>Name</th>
       <th>Balance</th>
       <th>Profit</th>
-      
+
     </tr>
     <?php
                                       $sql = "SELECT * from user_details order by uid desc";
                                       $result = $conn->query($sql);
-                                      
+
                                       if ($result->num_rows > 0) {
                                           while($row = $result->fetch_assoc()) {
-                                              
+
 $bal = $conn->query("select * from bal where uid ='{$row["uid"]}'");
 if($bal->num_rows>0) {
   while($ref=$bal->fetch_assoc()) {
     //echo $row["uid"].$ref["balance"];
- 
+
 ?>
 
 <tr>
@@ -114,9 +114,9 @@ if($bal->num_rows>0) {
     </td>
     </tr>
 
-                                        <?php 
+                                        <?php
                                                }
-                                              }  
+                                              }
                                       }
                                         }
                                         ?>
@@ -146,7 +146,7 @@ if($bal->num_rows>0) {
      body {
             color: black;
             font-family: 'SF Pro Display', sans-serif;
-                
+
     background:#e6e6e6;
         }
         .sidenav {

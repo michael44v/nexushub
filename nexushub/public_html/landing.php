@@ -5,17 +5,17 @@
 </style>
 <div class="section-one" style='background:#000000;'>
     <span style='color:#000000'>testing</span>
-    <div class="full" > 
+    <div class="full" >
     <span style='text-align:left;font-size:17px;' ><a href='/signup'> Sign up</a></span><span style='padding-left:10%;text-align:right; font-size:17px;'><a href='/signin/auth'> Sign in</a> <i class="fa fa-sign-in"></i> </span>
     </div>
     <br> <span style='color:#000000'>testing</span>
-</div>  
+</div>
 </div>
 <div class="header">
   <div class="left"><b style='color:orange'>VirtualSync</b></div>
   <div class="right">
-    
- 
+
+
   <button style="font-size:25px; " onclick="openNav()"> <i class="fa fa-bars" style='color:#ccc;'></i></button>
 <style>
   .sidenav {
@@ -76,8 +76,8 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 </script>
-   
-    
+
+
 
 </div>
 </div>
@@ -137,7 +137,7 @@ body {
 <div class="container">
   <img src="https://crypto-surge.com/images/bg1.jpg" alt="Snow" style="width:115%; opacity:0.9; height:70%; filter: brightness(50%);">
   <div class="bottom-left"></div>
- 
+
   <div class="centered">
         <div class="contentt">
             <h1 style='font-weight:600; font-size:45px; color:orange'>Embrace the<br>Future of<br>Decentralized<br>Finance.</h1>
@@ -187,6 +187,6 @@ body {
     <p><b>
     @2025 Virtual-Sync. All rights reserved.</b></p>
 
-  
+
   </div>
   

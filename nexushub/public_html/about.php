@@ -5,16 +5,16 @@
 </style>
 <div class="section-one" style='background:#000000;'>
     <span style='color:#000000'>testing</span>
-    <div class="full" > 
+    <div class="full" >
     <span style='text-align:left;font-size:17px;' ><a href='/signup'> Sign up</a></span><span style='padding-left:10%;text-align:right;font-size:17px;'><a href='/signin/auth'> Sign in</a> <i class="fa fa-sign-in"></i> </span>
     </div>
     <br> <span style='color:#000000'>testing</span>
-</div>  
+</div>
 </div>
 <div class="header">
   <div class="left"><b style='color:orange'>VirtualSync</b></div>
   <div class="right">
-   
+
   <button style="font-size:25px; " onclick="openNav()"> <i class="fa fa-bars" style='color:#ccc;'></i></button>
 <style>
   .sidenav {
@@ -75,8 +75,8 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 </script>
-   
-    
+
+
 
 </div>
 </div>
@@ -136,12 +136,12 @@ body {
 <div class="container">
   <img src="https://crypto-surge.com/images/bg2.jpg" alt="Snow" style="width:115%; opacity:0.9; height:45%">
   <div class="bottom-left"></div>
- 
+
   <div class="centered">
         <div class="contentt">
             <h1 style='font-weight:600; font-size:43px; color:orange'>About Us.</h1>
             <p style='font-weight:400; font-size:20px;'>Discover the vision and values behind Virtual-Sync.</p>
-           
+
         </div>
 
 </div>
@@ -183,7 +183,7 @@ body {
       <div class="user_team">
       <br><br> <br>
         <img src='https://crypto-surge.com/images/john-smith.jpg' style='width:50%; height:20%; border-radius:100%; display:block; margin:auto;'/><br>
-        
+
 <h2 style='text-align:center;font-weight:700;'><ins>John Smith</ins></h2>
         <p style='text-align:left; font-size:18px; letter-spacing:-0.5px;  width:110%;color:#696969;'>John oversees the technological development of our platform, ensuring that we deliver innovative and reliable solutions to our users.</p>
       </div>
@@ -191,7 +191,7 @@ body {
       <div class="user_team">
       <br><br> <br>
         <img src='https://crypto-surge.com/images/sofia.png' style='width:50%; height:20%; border-radius:100%; display:block; margin:auto;'/><br>
-        
+
 <h2 style='text-align:center;font-weight:700;'><ins>Sofia Davies</ins></h2>
         <p style='text-align:left; font-size:18px; letter-spacing:-0.5px;  width:110%;color:#696969;'>Sofia is responsible for promoting our brand and expanding our reach, helping us connect with clients and partners around the globe.</p>
       </div>
@@ -211,7 +211,7 @@ body {
     <p><b>
     @2025 Virtual-Sync. All rights reserved.</b></p>
 
-  
+
   </div><style>
      .cc {  column-count:2;}
      .foot {margin-left:-6%; height:20%;

@@ -15,27 +15,27 @@ include 'config.php'; include 'cdn.php';
     </a><br>
 
     <a href='/admin_deposits/new'>
-        
+
         <style> .badge { background:red; margin-top:-95%;}</style>
     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="white"><path d="M312-146.67h336v-124.66q0-70-49-118.67t-119-48.67q-70 0-119 48.67t-49 118.67v124.66ZM193.33-80q-14.16 0-23.75-9.62-9.58-9.61-9.58-23.83 0-14.22 9.58-23.72 9.59-9.5 23.75-9.5h52v-124.66q0-67.67 36.17-124.17t97.17-84.5q-61-28.67-97.17-85.17t-36.17-124.16v-124h-52q-14.16 0-23.75-9.62-9.58-9.62-9.58-23.83 0-14.22 9.58-23.72 9.59-9.5 23.75-9.5h573.34q14.16 0 23.75 9.62 9.58 9.61 9.58 23.83 0 14.22-9.58 23.72-9.59 9.5-23.75 9.5h-52v124q0 67.66-36.17 124.16T581.33-480q61 28 97.17 84.5t36.17 124.17v124.66h52q14.16 0 23.75 9.62 9.58 9.62 9.58 23.83 0 14.22-9.58 23.72-9.59 9.5-23.75 9.5H193.33Z"/></svg>
-    
-    
-   
+
+
+
     <?php
               $sqlll = "SELECT count(txn_id) as tx FROM withdrawals";
               $ress = $conn->query($sqlll);
-              
+
               if ($ress->num_rows > 0) {
                   while($roo = $ress->fetch_assoc()) {
                       echo "<span class='badge'>".$roo["tx"]."</span>";
-                     
+
                   }
               } else {
                   echo "";
               }
     ?>
-    
-    
+
+
     <br>
 </a>
     <a href="messenger.php"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="white"><path d="M240-240 136.67-136.67Q121-121 100.5-129.6 80-138.21 80-160.33v-653q0-27 19.83-46.84Q119.67-880 146.67-880h666.66q27 0 46.84 19.83Q880-840.33 880-813.33v506.66q0 27-19.83 46.84Q840.33-240 813.33-240H240Zm-28.67-66.67h602v-506.66H146.67v575l64.66-68.34Zm-64.66 0v-506.66 506.66Zm126.66-92.66H522q14.17 0 23.75-9.62t9.58-23.83q0-14.22-9.58-23.72-9.58-9.5-23.75-9.5H273.33q-14.16 0-23.75 9.62-9.58 9.61-9.58 23.83 0 14.22 9.58 23.72 9.59 9.5 23.75 9.5Zm0-126.67h413.34q14.16 0 23.75-9.62 9.58-9.61 9.58-23.83 0-14.22-9.58-23.72-9.59-9.5-23.75-9.5H273.33q-14.16 0-23.75 9.62-9.58 9.62-9.58 23.83 0 14.22 9.58 23.72 9.59 9.5 23.75 9.5Zm0-126.67h413.34q14.16 0 23.75-9.61 9.58-9.62 9.58-23.84 0-14.21-9.58-23.71-9.59-9.5-23.75-9.5H273.33q-14.16 0-23.75 9.61-9.58 9.62-9.58 23.84 0 14.21 9.58 23.71 9.59 9.5 23.75 9.5Z"/></svg><br></a><br>
@@ -44,7 +44,7 @@ include 'config.php'; include 'cdn.php';
     <a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="white"><path d="M480-80q-82.33 0-155.33-31.5-73-31.5-127.34-85.83Q143-251.67 111.5-324.67T80-480q0-74.33 25.5-140.83Q131-687.33 176-740q9.67-12 22.83-11.33Q212-750.67 221-742q9 8.67 11.83 22 2.84 13.33-9.16 27-36 43.67-56.5 97.83Q146.67-541 146.67-480q0 138.67 97.33 236 97.33 97.33 236 97.33 139.33 0 236.33-97.33t97-236q0-61-20.16-115.17Q773-649.33 737-693q-12-13.67-9.5-27t11.5-22q9-8.67 22.17-9.33Q774.33-752 784-740q45 52.67 70.5 119.17T880-480q0 82.33-31.5 155.33-31.5 73-85.5 127.34Q709-143 636-111.5T480-80Zm0-360q-14.33 0-23.83-9.5-9.5-9.5-9.5-23.83v-373.34q0-14.33 9.5-23.83 9.5-9.5 23.83-9.5 14.33 0 23.83 9.5 9.5 9.5 9.5 23.83v373.34q0 14.33-9.5 23.83-9.5 9.5-23.83 9.5Z"/></svg></a><br>
   </div>
 
-  
+
       <div class="content">
         <h2 style="text-align: center; color: black;"> Admin <img src='https://static.vecteezy.com/system/resources/previews/000/290/610/non_2x/administration-vector-icon.jpg' width='35px' style='border-radius:100%; position:absolute; display:block; margin-top:-8%;  margin-left: 1%; '/>
         </h3><br>
@@ -58,11 +58,11 @@ include 'config.php'; include 'cdn.php';
                               <?php
                                       $sql = "SELECT SUM(bal) as bal FROM bal where uid !=0";
                                       $result = $conn->query($sql);
-                                      
+
                                       if ($result->num_rows > 0) {
                                           while($row = $result->fetch_assoc()) {
                                               echo "$".number_format($row["bal"], 2);
-                                             
+
                                           }
                                       } else {
                                           echo "$0";
@@ -76,11 +76,11 @@ include 'config.php'; include 'cdn.php';
                 <span> <?php
                                       $sqll = "SELECT count(uid) as u FROM user_details";
                                       $res = $conn->query($sqll);
-                                      
+
                                       if ($res->num_rows > 0) {
                                           while($ro = $res->fetch_assoc()) {
                                               echo "".$ro["u"];
-                                             
+
                                           }
                                       } else {
                                           echo "0";
@@ -90,17 +90,17 @@ include 'config.php'; include 'cdn.php';
 
 
 <br>
-           
+
 <div class="astt">
     <h4>Pending Withdrawals</h4>
     <span><?php
                                       $sqllll = "SELECT count(txn_id) as tx FROM withdrawals";
                                       $resss = $conn->query($sqllll);
-                                      
+
                                       if ($resss->num_rows > 0) {
                                           while($roo = $resss->fetch_assoc()) {
                                               echo "".$roo["tx"];
-                                             
+
                                           }
                                       } else {
                                           echo "0";
@@ -109,7 +109,7 @@ include 'config.php'; include 'cdn.php';
 </div>
         </div>
 
-        
+
       </div>
 
 
@@ -145,7 +145,7 @@ include 'config.php'; include 'cdn.php';
         body {
             color: #ccc;
             font-family: 'SF Pro Display', sans-serif;
-                
+
     background: #e6e6e6;
         }
         .sidenav {

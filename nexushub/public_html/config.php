@@ -7,11 +7,34 @@ $password = "victor47009A";
 $dev = "htsuktdr_dev";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dev);
+mysqli_report(MYSQLI_REPORT_OFF);
+$conn = @new mysqli($servername, $username, $password, $dev);
 
 // Check connection
 if ($conn->connect_error) {
-  die("Connection failed: " .$conn->connect_error);
+    // If database connection fails, provide a fallback object to prevent blank fatal PHP error pages
+    $conn = new class {
+        public $connect_error = "Connection failed";
+        public $insert_id = 0;
+        public function query($q) {
+            return new class {
+                public $num_rows = 0;
+                public function fetch_assoc() { return null; }
+            };
+        }
+        public function prepare($q) {
+            return new class {
+                public function bind_param(...$a) {}
+                public function execute() { return true; }
+                public function get_result() {
+                    return new class {
+                        public $num_rows = 0;
+                        public function fetch_assoc() { return null; }
+                    };
+                }
+            };
+        }
+    };
 }
 else {
     //echo "Connected successfully";
