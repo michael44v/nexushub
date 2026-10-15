@@ -16,7 +16,7 @@ if (!isset($req)) {
             </a>
         </div>
 
-        <nav class="flex-1 px-6 space-y-2 mt-4">
+        <nav class="flex-1 px-6 space-y-2 mt-2">
             <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-700 mb-4 ml-4">Main Menu</p>
 
             <a href="/dashboard/<?php echo $req; ?>" class="group flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard/') !== false) ? 'bg-gradient-gold text-black font-700 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:bg-white/5 hover:text-white'; ?>">
@@ -50,6 +50,13 @@ if (!isset($req)) {
             <div class="pt-6">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-700 mb-4 ml-4">Support & Account</p>
 
+                <a href="/settings/<?php echo $req; ?>" class="group flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all <?php echo (strpos($_SERVER['REQUEST_URI'], '/settings/') !== false) ? 'bg-gradient-gold text-black font-700 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:bg-white/5 hover:text-white'; ?>">
+                    <div class="w-5 flex justify-center">
+                        <i class="fas fa-user-gear text-lg"></i>
+                    </div>
+                    <span class="text-sm">Profile & Settings</span>
+                </a>
+
                 <a href="/support/<?php echo $req; ?>-Support" class="group flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all <?php echo (strpos($_SERVER['REQUEST_URI'], '/support/') !== false) ? 'bg-gradient-gold text-black font-700 shadow-lg shadow-orange-500/20' : 'text-gray-400 hover:bg-white/5 hover:text-white'; ?>">
                     <div class="w-5 flex justify-center">
                         <i class="fas fa-headset text-lg"></i>
@@ -71,13 +78,13 @@ if (!isset($req)) {
                 <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl -mr-12 -mt-12 transition-all group-hover:bg-primary/20"></div>
                 <p class="text-[11px] text-primary font-700 uppercase tracking-widest mb-2">Pro Member</p>
                 <p class="text-xs text-gray-400 leading-relaxed mb-4">Master the markets with institutional tools.</p>
-                <button class="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-700 transition-all">Upgrade Plan</button>
+                <a href="/settings/<?php echo $req; ?>" class="block text-center w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-700 transition-all">Account Settings</a>
             </div>
         </div>
     </aside>
 
-    <!-- Mobile Nav -->
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-t border-white/10 px-6 py-4 z-50 flex justify-between items-center">
+    <!-- Mobile Nav Bottom Bar -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-4 z-50 flex justify-between items-center">
         <a href="/dashboard/<?php echo $req; ?>" class="flex flex-col items-center gap-1 <?php echo (strpos($_SERVER['REQUEST_URI'], '/dashboard/') !== false) ? 'text-primary' : 'text-gray-500'; ?>">
             <i class="fas fa-th-large text-lg"></i>
             <span class="text-[10px] font-700 uppercase">Home</span>
@@ -93,9 +100,9 @@ if (!isset($req)) {
             <i class="fas fa-clock-rotate-left text-lg"></i>
             <span class="text-[10px] font-700 uppercase">History</span>
         </a>
-        <button id="mobile-menu-toggle" class="flex flex-col items-center gap-1 text-gray-500">
+        <button id="mobile-menu-toggle" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition">
             <i class="fas fa-bars text-lg"></i>
-            <span class="text-[10px] font-700 uppercase">More</span>
+            <span class="text-[10px] font-700 uppercase">Menu</span>
         </button>
     </nav>
 
@@ -103,7 +110,10 @@ if (!isset($req)) {
     <main class="flex-1 lg:ml-72 min-h-screen pb-24 lg:pb-0">
         <!-- Top Bar -->
         <header class="h-20 border-b border-white/5 bg-black/20 backdrop-blur-md px-4 lg:px-10 flex items-center justify-between sticky top-0 z-30">
-            <div>
+            <div class="flex items-center gap-3">
+                <button id="top-hamburger-btn" class="lg:hidden p-2 text-gray-300 hover:text-white focus:outline-none bg-white/5 rounded-xl border border-white/10" aria-label="Open Navigation">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
                 <h2 class="font-syne text-xl font-700 text-white hidden lg:block">
                     <?php
                         if(strpos($_SERVER['REQUEST_URI'], '/dashboard/') !== false) echo "Market Overview";
@@ -111,18 +121,19 @@ if (!isset($req)) {
                         elseif(strpos($_SERVER['REQUEST_URI'], '/history/') !== false) echo "Transaction History";
                         elseif(strpos($_SERVER['REQUEST_URI'], '/support/') !== false) echo "Support Center";
                         elseif(strpos($_SERVER['REQUEST_URI'], '/withdraw/') !== false) echo "Withdraw Funds";
+                        elseif(strpos($_SERVER['REQUEST_URI'], '/settings/') !== false) echo "Profile & Settings";
                         else echo "Dashboard";
                     ?>
                 </h2>
-                <div class="lg:hidden flex items-center gap-3">
-                    <div class="w-8 h-8 bg-gradient-gold rounded-lg flex items-center justify-center">
+                <div class="lg:hidden flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-gold rounded-lg flex items-center justify-center shadow-md shadow-orange-500/20">
                         <i class="fas fa-chart-line text-black text-sm"></i>
                     </div>
                     <span class="font-syne text-lg font-800 gradient-text">NexusHub</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 lg:gap-8">
+            <div class="flex items-center gap-3 lg:gap-8">
                 <!-- Market Status -->
                 <div class="hidden md:flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1.5 rounded-full">
                     <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -136,7 +147,7 @@ if (!isset($req)) {
                 </button>
 
                 <!-- User Profile -->
-                <div class="flex items-center gap-3 pl-4 border-l border-white/10">
+                <a href="/settings/<?php echo $req; ?>" class="flex items-center gap-3 pl-3 border-l border-white/10 hover:opacity-90 transition">
                     <div class="text-right hidden sm:block">
                         <p class="text-xs font-700 text-white uppercase tracking-wider flex items-center justify-end gap-1.5">
                             <?php echo isset($loop['uname']) ? htmlspecialchars($loop['uname']) : 'Trader'; ?>
@@ -161,7 +172,7 @@ if (!isset($req)) {
                             <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 text-black text-[9px] font-900 rounded-full flex items-center justify-center border-2 border-black" title="Verified Account">✓</span>
                         <?php endif; ?>
                     </div>
-                </div>
+                </a>
             </div>
         </header>
 

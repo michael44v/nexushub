@@ -31,6 +31,10 @@ else if (preg_match('/^history\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches
     $req = $matches[1]; 
     include 'history.php';
 }
+else if (preg_match('/^settings\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
+    $req = $matches[1];
+    include 'settings.php';
+}
 else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $matches)) {
     $req = $matches[1]; 
     include 'admin_deposits.php';
@@ -67,6 +71,9 @@ else if (preg_match('/^admin\/secured\/(.*)$/', $request, $matches)) {
                break;
         
      
+        case 'settings':
+            include 'settings.php';
+            break;
         case 'user_management':
             include 'user_management.php';
             break;
