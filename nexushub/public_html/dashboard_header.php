@@ -138,11 +138,28 @@ if (!isset($req)) {
                 <!-- User Profile -->
                 <div class="flex items-center gap-3 pl-4 border-l border-white/10">
                     <div class="text-right hidden sm:block">
-                        <p class="text-xs font-700 text-white uppercase tracking-wider"><?php echo isset($loop['uname']) ? $loop['uname'] : 'Trader'; ?></p>
+                        <p class="text-xs font-700 text-white uppercase tracking-wider flex items-center justify-end gap-1.5">
+                            <?php echo isset($loop['uname']) ? htmlspecialchars($loop['uname']) : 'Trader'; ?>
+                            <?php
+                                $kycStat = isset($loop['kyc_status']) ? $loop['kyc_status'] : 'Not Submitted';
+                                if ($kycStat === 'Verified') {
+                                    echo '<span class="inline-flex items-center gap-1 bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-800 px-2 py-0.5 rounded-full" title="Identity Verified"><i class="fas fa-check-circle"></i> Verified</span>';
+                                } elseif ($kycStat === 'Pending Approval') {
+                                    echo '<span class="inline-flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-800 px-2 py-0.5 rounded-full" title="KYC Under Review"><i class="fas fa-clock"></i> Pending</span>';
+                                } elseif ($kycStat === 'Rejected') {
+                                    echo '<span class="inline-flex items-center gap-1 bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-800 px-2 py-0.5 rounded-full" title="KYC Rejected"><i class="fas fa-times-circle"></i> Rejected</span>';
+                                } else {
+                                    echo '<span class="inline-flex items-center gap-1 bg-gray-500/10 border border-gray-500/30 text-gray-400 text-[10px] font-800 px-2 py-0.5 rounded-full"><i class="fas fa-shield-alt"></i> Unverified</span>';
+                                }
+                            ?>
+                        </p>
                         <p class="text-[10px] text-gray-500 font-500">UID: <?php echo isset($u) ? $u : (isset($numbers) ? $numbers : '0000'); ?></p>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 border border-white/10 flex items-center justify-center font-syne font-800 text-sm text-gray-400">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 border border-white/10 flex items-center justify-center font-syne font-800 text-sm text-gray-400 relative">
                         <?php echo isset($loop['uname']) ? strtoupper(substr($loop['uname'], 0, 1)) : 'T'; ?>
+                        <?php if (isset($loop['kyc_status']) && $loop['kyc_status'] === 'Verified'): ?>
+                            <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 text-black text-[9px] font-900 rounded-full flex items-center justify-center border-2 border-black" title="Verified Account">✓</span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
