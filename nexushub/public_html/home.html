@@ -1366,28 +1366,38 @@ const names = ["Michael", "Sarah", "Enock", "Joebat", "Gabriella", "Kidi", "Adam
 const actions = ["invested", "withdrew", "earned", "deposited"];
 const amounts = ["10k", "50k", "100k", "250k", "500k", "1M", "5k", "20k"];
 
-function showNotification() {
-    const toast = document.getElementById('notification-toast');
-    const name = names[Math.floor(Math.random() * names.length)];
-    const action = actions[Math.floor(Math.random() * actions.length)];
-    const amount = amounts[Math.floor(Math.random() * amounts.length)];
+const timeAgoList = ["Just now", "2 secs ago", "5 secs ago", "12 secs ago", "28 secs ago", "45 secs ago", "1 min ago"];
 
-    const verifiedBadge = `<span style="display:inline-flex; align-items:center; gap:3px; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); color:#22c55e; font-size:10px; padding:1px 6px; border-radius:12px; font-weight:700;"><i class="fas fa-check-circle" style="font-size:10px;"></i> Verified</span>`;
-
-    document.getElementById('notif-text').innerHTML = `<span>${name}</span> ${verifiedBadge} <span>${action} $${amount}</span>`;
-
-    toast.classList.add('show');
+function scheduleNextNotification() {
+    const randomDelay = Math.floor(Math.random() * 4000) + 2000; // 2s to 6s random interval
 
     setTimeout(() => {
-        toast.classList.remove('show');
-    }, 2000); // stay for 2s
+        const toast = document.getElementById('notification-toast');
+        if (!toast) return;
+
+        const name = names[Math.floor(Math.random() * names.length)];
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        const amount = amounts[Math.floor(Math.random() * amounts.length)];
+        const timeAgo = timeAgoList[Math.floor(Math.random() * timeAgoList.length)];
+
+        const verifiedBadge = `<span style="display:inline-flex; align-items:center; gap:3px; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); color:#22c55e; font-size:10px; padding:1px 6px; border-radius:12px; font-weight:700;"><i class="fas fa-check-circle" style="font-size:10px;"></i> Verified</span>`;
+
+        document.getElementById('notif-text').innerHTML = `<span>${name}</span> ${verifiedBadge} <span>${action} $${amount}</span>`;
+        document.getElementById('notif-sub').textContent = timeAgo;
+
+        toast.classList.add('show');
+
+        // Stay visible for random duration (2.5s - 4s)
+        const visibleDuration = Math.floor(Math.random() * 1500) + 2500;
+        setTimeout(() => {
+            toast.classList.remove('show');
+            scheduleNextNotification();
+        }, visibleDuration);
+    }, randomDelay);
 }
 
-// Initial delay
-setTimeout(() => {
-    showNotification();
-    setInterval(showNotification, 3000); // Every 3 seconds (1s gap)
-}, 2000);
+// Start randomized notification pop-ups loop
+scheduleNextNotification();
 </script>
 </body>
 </html>
