@@ -58,12 +58,20 @@ $code = filter($_GET['code'] ?? '');
 $page = null;
 
 if ($code) {
-    $stmt = $conn->prepare("SELECT * FROM special_payment_pages WHERE code = ?");
-    if ($stmt) {
-        $stmt->bind_param("s", $code);
-        $stmt->execute();
-        $res = $stmt->get_result();
-        if ($res->num_rows > 0) {
+    if (method_exists($conn, 'prepare')) {
+        $stmt = $conn->prepare("SELECT * FROM special_payment_pages WHERE code = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $code);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            if ($res && isset($res->num_rows) && $res->num_rows > 0) {
+                $page = $res->fetch_assoc();
+            }
+        }
+    } else if (method_exists($conn, 'query')) {
+        $clean_code = filter($code);
+        $res = $conn->query("SELECT * FROM special_payment_pages WHERE code = '$clean_code'");
+        if ($res && isset($res->num_rows) && $res->num_rows > 0) {
             $page = $res->fetch_assoc();
         }
     }
