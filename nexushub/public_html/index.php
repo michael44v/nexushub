@@ -52,7 +52,8 @@ else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $
              case 'smart':
                 include 'smartseo.html';
              break;
-        case 'admin':
+        case 'admin/secured/@root':
+        case 'admin/secured/%40root':
               include 'admin.php';
              break;
         case 'messenger':
