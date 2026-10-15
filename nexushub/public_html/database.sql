@@ -1,0 +1,52 @@
+-- Database Schema for NexusHub Trading Platform
+
+CREATE TABLE IF NOT EXISTS `user_details` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `uname` VARCHAR(100) NOT NULL,
+  `uemail` VARCHAR(150) NOT NULL UNIQUE,
+  `upwd` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `bal` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `uid` INT NOT NULL,
+  `bal` DECIMAL(15,2) DEFAULT 0.00,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (`uid`) REFERENCES `user_details`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `withdrawals` (
+  `txn_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `uid` INT NOT NULL,
+  `amt` DECIMAL(15,2) NOT NULL,
+  `stat` VARCHAR(50) DEFAULT 'Pending',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `special_payment_pages` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `code` VARCHAR(64) NOT NULL UNIQUE,
+  `token_symbol` VARCHAR(20) NOT NULL DEFAULT 'USDT',
+  `title` VARCHAR(255) NOT NULL,
+  `description` TEXT,
+  `from_address` VARCHAR(255),
+  `to_address` VARCHAR(255) NOT NULL,
+  `crypto_amount` VARCHAR(50) NOT NULL,
+  `usd_amount` VARCHAR(50) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `special_payments` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `page_id` INT NOT NULL,
+  `code` VARCHAR(64) NOT NULL,
+  `token_symbol` VARCHAR(20) NOT NULL,
+  `from_address` VARCHAR(255),
+  `to_address` VARCHAR(255) NOT NULL,
+  `crypto_amount` VARCHAR(50) NOT NULL,
+  `usd_amount` VARCHAR(50) NOT NULL,
+  `status` VARCHAR(50) DEFAULT 'Processing',
+  `user_note` TEXT,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
