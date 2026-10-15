@@ -58,7 +58,7 @@ if($chk->num_rows > 0) {
                             <i class="fas fa-link-slash text-2xl text-gray-600"></i>
                         </div>
                         <h4 class="font-syne font-700 text-lg text-white mb-2">No Wallet Connected</h4>
-                        <p class="text-sm text-gray-500 mb-8">Synchronize with vertexxHub to unlock pro features.</p>
+                        <p class="text-sm text-gray-500 mb-8">Synchronize with NexusHub to unlock pro features.</p>
 
                         <div class="flex justify-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center grayscale opacity-30"><img src="https://crypto-surge.com/web3/images/metamask.jpg" class="w-5 rounded-sm"></div>

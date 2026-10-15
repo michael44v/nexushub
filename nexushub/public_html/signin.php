@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 include 'cdn.php'; include 'config.php';
@@ -41,7 +40,7 @@ if(isset($_POST['email'])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign In — VertexxHub</title>
+  <title>Sign In — NexusHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -329,7 +328,7 @@ if(isset($_POST['email'])) {
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     </div>
-    <h1>VertexxHub</h1>
+    <h1>NexusHub</h1>
     <p>Web3 Wallet Platform</p>
   </div>
 
@@ -375,144 +374,9 @@ if(isset($_POST['email'])) {
 
     <div class="divider">or</div>
 
-    <p class="auth-footer">New to VertexxHub? <a href="/signup">Create an account</a></p>
+    <p class="auth-footer">New to NexusHub? <a href="/signup">Create an account</a></p>
 
   </div>
 </div>
 </body>
 </html>
-=======
-<?php
-session_start();
-include 'cdn.php';
-include 'config.php';
-
-$message = '';
-$message_type = '';
-
-switch($req) {
-    case 'success':
-        $message = 'Registration successful. Login to view your Web3 Wallet.';
-        $message_type = 'success';
-        break;
-    case 'logout':
-        $_SESSION = array();
-        session_destroy();
-        $message = 'You have been logged out!';
-        $message_type = 'danger';
-        break;
-}
-
-if(isset($_POST['email'])) {
-    $m = filter($_POST['email']);
-    $pwd = filter($_POST['pwd']);
-
-    $log =$conn->query("select * from user_details where uemail='$m' and upwd='$pwd'");
-    if($log->num_rows>0) {
-        while($loop=$log->fetch_assoc()) {
-            $_SESSION['uid'] = $loop['uid'];
-            $identifier = substr($loop['uname'], 0, 3);
-            if (isset($_SESSION['uid']) && $_SESSION['uid'] == $loop['uid']) {
-                ?>
-                <script>
-                    var idf = '<?php echo $identifier.$_SESSION['uid'];?>';
-                    window.location.href = '/dashboard/'+idf;
-                </script>
-                <?php
-                exit;
-            }
-        }
-    } else {
-        $message = 'Incorrect Email and password Combination.';
-        $message_type = 'danger';
-    }
-}
-?>
-
-<div class="min-h-screen flex items-center justify-center bg-[#050505] px-4 py-12">
-    <!-- Background Glow -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-orange-500/10 rounded-full blur-[120px]"></div>
-        <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-amber-500/10 rounded-full blur-[120px]"></div>
-    </div>
-
-    <div class="relative w-full max-w-md">
-        <!-- Logo -->
-        <div class="flex flex-col items-center mb-8">
-            <div class="w-12 h-12 bg-gradient-gold rounded-xl flex items-center justify-center mb-3 shadow-lg shadow-orange-500/20">
-                <i class="fas fa-chart-line text-black text-xl"></i>
-            </div>
-            <h1 class="font-syne text-2xl font-800 gradient-text">vertexxHub</h1>
-            <p class="text-gray-400 text-sm mt-1">Professional Trading Platform</p>
-        </div>
-
-        <!-- Card -->
-        <div class="card-dark rounded-3xl p-8 border border-white/10 shadow-2xl">
-            <div class="text-center mb-8">
-                <h2 class="font-syne text-2xl font-700 text-white">Welcome Back</h2>
-                <p class="text-gray-400 text-sm mt-2">Access your Virtual-Sync Web3 Wallet</p>
-            </div>
-
-            <?php if($message): ?>
-                <div class="mb-6 p-4 rounded-xl text-sm font-medium <?php echo $message_type == 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'; ?>">
-                    <div class="flex items-center gap-3">
-                        <i class="fas <?php echo $message_type == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'; ?>"></i>
-                        <?php echo $message; ?>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <form method="post" action="/signin/auth" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2 ml-1">Email Address</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <input type="email" name="email" placeholder="name@example.com" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-2 ml-1">
-                        <label class="block text-sm font-medium text-gray-400">Password</label>
-                        <a href="#" class="text-xs text-primary hover:text-amber-400 transition">Forgot password?</a>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <input type="password" name="pwd" placeholder="••••••••" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-2 ml-1">
-                    <input type="checkbox" id="remember" class="w-4 h-4 rounded border-white/10 bg-white/5 text-primary focus:ring-primary/50">
-                    <label for="remember" class="text-xs text-gray-400">Stay signed in for 30 days</label>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-gradient-gold text-black font-800 py-4 rounded-xl shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 font-syne uppercase tracking-wider">
-                    Sign In <i class="fas fa-arrow-right text-sm"></i>
-                </button>
-            </form>
-
-            <div class="mt-8 text-center">
-                <p class="text-gray-400 text-sm">
-                    Don't have an account?
-                    <a href="/signup" class="text-primary font-700 hover:text-amber-400 transition ml-1">Create Wallet</a>
-                </p>
-            </div>
-        </div>
-
-        <!-- Footer Links -->
-        <div class="mt-8 flex justify-center space-x-6 text-xs text-gray-600">
-            <a href="/" class="hover:text-gray-400 transition">Home</a>
-            <a href="#" class="hover:text-gray-400 transition">Privacy Policy</a>
-            <a href="#" class="hover:text-gray-400 transition">Terms of Service</a>
-        </div>
-    </div>
-</div>
->>>>>>> 12268fcf1fa663a3fe6a84e234f859567e0df2f3
