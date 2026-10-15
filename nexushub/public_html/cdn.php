@@ -84,7 +84,7 @@
             background: #444;
         }
 
-        /* WhatsApp Float Legacy */
+        /* WhatsApp Float & Mobile Popups */
         .float {
             position: fixed;
             width: 60px;
@@ -98,6 +98,12 @@
             font-size: 30px;
             box-shadow: 2px 2px 3px #999;
             z-index: 100;
+        }
+
+        @media (max-width: 640px) {
+            .float, .bottom-popup, [class*="popup"], [id*="popup"] {
+                max-width: 60% !important;
+            }
         }
         .my-float {
             margin-top: 16px;
