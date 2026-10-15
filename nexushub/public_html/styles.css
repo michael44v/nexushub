@@ -1,0 +1,38 @@
+
+
+/* For the input field */
+.input {
+    border: 1px solid #ccc;
+    padding: 3%;
+    width: 80%;
+    border-radius: 7px;
+    display: block;
+    margin: auto;
+    color: black;
+}
+
+/* For the submit button */
+.submit {
+    border: hidden;
+    padding: 3.5%;
+    width: 80%;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 500;
+    display: block;
+    margin: auto;
+    color: white;
+    background: #2791e8;
+}
+
+/* For the error message */
+.errmsg {
+    display: block;
+    margin: auto;
+    color: #fff;
+    background: red;
+    width: 80%;
+    font-size: larger;
+    border-radius: 12px;
+    text-align: center;
+}
