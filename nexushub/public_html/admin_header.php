@@ -103,7 +103,7 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
             <p class="px-3 text-[10px] font-800 uppercase tracking-widest text-gray-500 mb-2">Main Controls</p>
 
             <!-- 1. Overview / Dashboard -->
-            <a href="/admin" class="admin-nav-item <?php echo ($currentUri === '/admin' || $currentUri === '/admin/') ? 'active' : ''; ?>">
+            <a href="/admin/secured/@root#hash" class="admin-nav-item <?php echo (strpos($currentUri, '/admin/secured') !== false) ? 'active' : ''; ?>">
                 <div class="flex items-center gap-3">
                     <i class="fas fa-chart-pie w-5 text-center"></i>
                     <span>Overview</span>
