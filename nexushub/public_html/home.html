@@ -101,40 +101,112 @@
         /* Trend mini chart SVG */
         .mini-chart { height: 40px; }
 
+
+        /* ── Hero v2 ── */
+        .hero-blob { position:absolute; border-radius:50%; filter:blur(90px); pointer-events:none; }
+        .hero-blob-1 { width:560px;height:560px;background:rgba(99,102,241,0.32);top:-180px;left:-140px;animation:blobFloat 14s ease-in-out infinite; }
+        .hero-blob-2 { width:460px;height:460px;background:rgba(34,211,238,0.20);top:5%;right:-130px;animation:blobFloat 18s ease-in-out infinite reverse; }
+        .hero-blob-3 { width:380px;height:380px;background:rgba(139,92,246,0.22);bottom:-160px;left:38%;animation:blobFloat 16s ease-in-out infinite 2s; }
+        @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(40px,-30px) scale(1.08);} 66%{transform:translate(-30px,25px) scale(.95);} }
+        .hero-grid-overlay { position:absolute; inset:0; pointer-events:none;
+            background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);
+            background-size:56px 56px;
+            -webkit-mask-image:radial-gradient(ellipse 85% 65% at 50% 0%,#000 25%,transparent 78%);
+            mask-image:radial-gradient(ellipse 85% 65% at 50% 0%,#000 25%,transparent 78%); }
+        .hero-avatar { width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;border:2px solid #05050a;font-family:'Syne',sans-serif;color:#fff; }
+        .hero-stat { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:18px;padding:18px 20px;backdrop-filter:blur(12px);text-align:center;transition:border-color .3s, transform .3s; }
+        .hero-stat:hover { border-color:rgba(99,102,241,0.4); transform:translateY(-3px); }
+        .hero-stat-val { font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin:0; }
+        .hero-stat-label { color:#6b7280;font-size:12px;margin:4px 0 0;text-transform:uppercase;letter-spacing:0.06em; }
+        .float-chip { position:absolute; display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:16px; z-index:3; animation:floatY 5s ease-in-out infinite; }
+        .float-chip-1 { top:-18px; right:-8px; }
+        .float-chip-2 { bottom:-18px; left:-8px; animation-delay:2.5s; }
+        @keyframes floatY { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+        @media (max-width:1023px){
+            .hero-panel-wrap { max-width:480px; margin:0 auto; width:100%; }
+            .float-chip-1 { right:6px; }
+            .float-chip-2 { left:6px; }
+        }
+
         /* Notification Pop-up */
-        #notification-toast {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #ffffff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            border: 1px solid #e5e7eb;
-            padding: 12px 20px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 1000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        #notification-toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .notif-icon {
-            width: 32px;
-            height: 32px;
-            background: #22c55e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 14px;
-        }
+      
+/* Notification Popup */
+#notification-toast {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: min(380px, calc(100vw - 32px));
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+}
+
+#notification-toast.show {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+#notification-toast .notif-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #16a34a;
+    color: #ffffff;
+}
+
+#notification-toast p {
+    overflow-wrap: anywhere;
+}
+
+#notification-toast button {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px;
+    align-self: flex-start;
+}
+
+@media (max-width: 480px) {
+    #notification-toast {
+        left: 16px;
+        bottom: 16px;
+        width: calc(100vw - 32px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #notification-toast {
+        transition: none;
+    }
+}
+
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -187,85 +259,124 @@
 <!-- ══════════════════════════════════════════
      HERO
 ══════════════════════════════════════════ -->
-<section style="background: radial-gradient(circle at 50% 20%, rgba(99,102,241,0.25) 0%, transparent 50%), radial-gradient(circle at 10% 80%, rgba(34,211,238,0.15) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(139,92,246,0.15) 0%, transparent 40%), #05050a; padding: 110px 1rem 120px; border-bottom: 1px solid rgba(255,255,255,0.08); position:relative;">
-    <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
-        <div class="live-badge mb-6 shadow-lg shadow-emerald-500/10">
-            <span class="pulse-dot"></span>
-            Live Institutional Multi-Asset Trading Platform
-        </div>
+<section class="relative overflow-hidden" style="background:#05050a;padding:100px 1rem 110px;border-bottom:1px solid rgba(255,255,255,0.08);">
+    <!-- Animated background -->
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="hero-grid-overlay"></div>
 
-        <h1 style="font-size:clamp(3rem,6vw,5.2rem);font-weight:800;line-height:1.05;margin-bottom:1.5rem;font-family:'Syne',sans-serif;max-width:900px;">
-            Empower Your Trading with <span class="gradient-text">NexusHub</span>
-        </h1>
-
-        <p style="color:#9ca3af;font-size:1.25rem;line-height:1.7;margin-bottom:2.5rem;max-width:680px;">
-            Trade Cryptocurrencies, Global Stocks, and Forex with ultra-low latency, institutional liquidity, and zero commission. Built for modern high-frequency traders.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-5 mb-14 w-full sm:w-auto justify-center">
-            <a href="signup.php" class="bg-gradient-primary text-black px-10 py-4.5 rounded-2xl font-extrabold text-center text-base hover:scale-105 transition shadow-2xl" style="box-shadow:0 20px 40px rgba(99,102,241,0.35);">
-                Open Free Account <i class="fas fa-arrow-right ml-2"></i>
-            </a>
-            <a href="#live-prices" class="border border-white/20 bg-white/5 backdrop-blur-lg px-10 py-4.5 rounded-2xl font-bold text-center text-base hover:bg-white/10 transition text-white">
-                <i class="fas fa-chart-line mr-2 text-cyan-400"></i> Explore Markets
-            </a>
-        </div>
-
-        <!-- Floating Live Stats Cards Grid -->
-        <div class="w-full max-w-5xl grid md:grid-cols-3 gap-6 text-left mt-4">
-            <div style="background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:24px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                    <span style="font-size:12px;color:#9ca3af;text-transform:uppercase;font-weight:700;letter-spacing:0.05em;">Execution Latency</span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                </div>
-                <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;">0.01ms</div>
-                <p style="font-size:12px;color:#22c55e;margin-top:4px;font-weight:600;"><i class="fas fa-check-circle mr-1"></i> Ultra-Fast Matching Engine</p>
+    <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative" style="z-index:2;">
+        <!-- Left: copy -->
+        <div class="text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold tracking-wider mb-8" style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;">
+                <span class="pulse-dot"></span>
+                LIVE · INSTITUTIONAL MULTI-ASSET PLATFORM
             </div>
 
-            <div style="background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:24px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                    <span style="font-size:12px;color:#9ca3af;text-transform:uppercase;font-weight:700;letter-spacing:0.05em;">24h Volume</span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
-                </div>
-                <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;">$4.2 Billion+</div>
-                <p style="font-size:12px;color:#6366f1;margin-top:4px;font-weight:600;"><i class="fas fa-globe mr-1"></i> Global Liquidity Pools</p>
+            <h1 style="font-family:'Syne',sans-serif;font-size:clamp(2.6rem,5.2vw,4.4rem);font-weight:800;line-height:1.05;letter-spacing:-0.02em;margin-bottom:22px;">
+               Unlock the &amp; Value of your <span class="gradient-text">Digital wallet</span>
+            </h1>
+
+            <p style="color:#9ca3af;font-size:1.12rem;line-height:1.75;margin-bottom:34px;max-width:520px;" class="mx-auto lg:mx-0">
+                Zero commission. 0.01ms execution. Institutional liquidity across 2,000+ assets — built for traders who refuse to wait.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 mb-10 justify-center lg:justify-start">
+                <a href="signup.php" class="bg-gradient-primary text-black px-9 py-4 rounded-2xl font-extrabold text-center hover:scale-[1.04] transition" style="box-shadow:0 16px 40px rgba(99,102,241,0.4);">
+                    Open Free Account <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#live-prices" class="border border-white/15 bg-white/5 backdrop-blur px-9 py-4 rounded-2xl font-bold text-center hover:bg-white/10 transition text-white">
+                    <i class="fas fa-play-circle mr-2 text-cyan-400"></i>Explore Markets
+                </a>
             </div>
 
-            <div style="background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:24px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                    <span style="font-size:12px;color:#9ca3af;text-transform:uppercase;font-weight:700;letter-spacing:0.05em;">Active Traders</span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <div class="flex items-center gap-4 justify-center lg:justify-start">
+                <div style="display:flex;">
+                    <div class="hero-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">AR</div>
+                    <div class="hero-avatar" style="background:linear-gradient(135deg,#22d3ee,#0ea5e9);margin-left:-10px;">SC</div>
+                    <div class="hero-avatar" style="background:linear-gradient(135deg,#22c55e,#16a34a);margin-left:-10px;">MS</div>
+                    <div class="hero-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);margin-left:-10px;color:#000;">JK</div>
+                    <div class="hero-avatar" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);margin-left:-10px;font-size:10px;">+1M</div>
                 </div>
-                <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;">1,200,000+</div>
-                <p style="font-size:12px;color:#22d3ee;margin-top:4px;font-weight:600;"><i class="fas fa-users mr-1"></i> Worldwide Verified Users</p>
+                <div class="text-left">
+                    <div style="display:flex;gap:2px;color:#22d3ee;font-size:11px;margin-bottom:3px;">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p style="color:#6b7280;font-size:12px;margin:0;">Trusted by <b style="color:#fff;">1.2M+ traders</b> · 4.9/5 on Trustpilot</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: live trading panel -->
+        <div class="relative hero-panel-wrap">
+            <div class="float-chip float-chip-1 card-dark">
+                <i class="fas fa-bolt" style="color:#22c55e;"></i>
+                <div><p style="margin:0;font-weight:700;font-size:12px;">0.01ms</p><p style="margin:0;font-size:10px;color:#6b7280;">Execution</p></div>
+            </div>
+            <div class="float-chip float-chip-2 card-dark">
+                <i class="fas fa-copy" style="color:#6366f1;"></i>
+                <div><p style="margin:0;font-weight:700;font-size:12px;">12,408 copying</p><p style="margin:0;font-size:10px;color:#6b7280;">Copy Trading live</p></div>
+            </div>
+
+            <div style="border-radius:24px;padding:26px;background:rgba(13,13,22,0.75);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(24px);box-shadow:0 40px 90px rgba(0,0,0,0.55);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:40px;height:40px;border-radius:50%;background:rgba(247,147,26,0.12);border:1px solid rgba(247,147,26,0.3);display:flex;align-items:center;justify-content:center;font-weight:800;color:#f7931a;font-size:16px;">&#8383;</div>
+                        <div>
+                            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">BTC / USDT</div>
+                            <div style="font-size:11px;color:#6b7280;">Perpetual &middot; Up to 100x</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:6px;">
+                        <button style="padding:4px 12px;border-radius:100px;background:rgba(99,102,241,0.2);color:#818cf8;border:none;font-size:12px;font-weight:600;cursor:pointer;">1H</button>
+                        <button style="padding:4px 12px;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:none;font-size:12px;cursor:pointer;">4H</button>
+                        <button style="padding:4px 12px;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:none;font-size:12px;cursor:pointer;">1D</button>
+                    </div>
+                </div>
+
+                <div class="live-btc-price" style="font-family:'Syne',sans-serif;font-size:2.1rem;font-weight:800;margin-bottom:4px;">$67,842.50</div>
+                <div class="live-btc-change" style="font-size:13px;color:#22c55e;margin-bottom:18px;">&#9650; $1,632.20 (+2.47%) past 24h</div>
+
+                <svg class="live-btc-chart" viewBox="0 0 400 150" style="width:100%;height:150px;">
+                    <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+                        <line x1="0" y1="37" x2="400" y2="37"/>
+                        <line x1="0" y1="75" x2="400" y2="75"/>
+                        <line x1="0" y1="112" x2="400" y2="112"/>
+                    </g>
+                    <defs>
+                        <linearGradient id="heroChartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M0,120 L20,110 L40,115 L60,90 L80,95 L100,75 L120,80 L140,60 L160,65 L180,45 L200,50 L220,35 L240,42 L260,28 L280,32 L300,20 L320,25 L340,15 L360,20 L380,10 L400,5 L400,150 L0,150 Z" fill="url(#heroChartGrad)"/>
+                    <path d="M0,120 L20,110 L40,115 L60,90 L80,95 L100,75 L120,80 L140,60 L160,65 L180,45 L200,50 L220,35 L240,42 L260,28 L280,32 L300,20 L320,25 L340,15 L360,20 L380,10 L400,5" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="400" cy="5" r="4.5" fill="#22d3ee" style="filter:drop-shadow(0 0 8px #22d3ee);">
+                        <animate attributeName="opacity" values="1;.35;1" dur="1.6s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;">
+                    <button style="padding:13px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;">BUY / LONG</button>
+                    <button style="padding:13px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;">SELL / SHORT</button>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07);">
+                    <div><p style="margin:0;font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">24h High</p><p style="margin:2px 0 0;font-size:13px;font-weight:700;color:#22c55e;">$68,240</p></div>
+                    <div style="text-align:center;"><p style="margin:0;font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">24h Low</p><p style="margin:2px 0 0;font-size:13px;font-weight:700;color:#ef4444;">$65,980</p></div>
+                    <div style="text-align:right;"><p style="margin:0;font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">24h Volume</p><p style="margin:2px 0 0;font-size:13px;font-weight:700;color:#fff;">$28.4B</p></div>
+                </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- ══════════════════════════════════════════
-     STATS BAR (WHITE)
-══════════════════════════════════════════ -->
-<section class="white-section py-16 px-4">
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-                <p style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$4.2B+</p>
-                <p style="color:#666;font-size:0.9rem;margin-top:4px;">Daily Trading Volume</p>
-            </div>
-            <div>
-                <p style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1.2M+</p>
-                <p style="color:#666;font-size:0.9rem;margin-top:4px;">Active Traders</p>
-            </div>
-            <div>
-                <p style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0.01ms</p>
-                <p style="color:#666;font-size:0.9rem;margin-top:4px;">Execution Speed</p>
-            </div>
-            <div>
-                <p style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">150+</p>
-                <p style="color:#666;font-size:0.9rem;margin-top:4px;">Countries Supported</p>
-            </div>
-        </div>
+    <!-- Stats strip -->
+    <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 relative" style="z-index:2;">
+        <div class="hero-stat"><p class="hero-stat-val gradient-text">$4.2B+</p><p class="hero-stat-label">Daily Volume</p></div>
+        <div class="hero-stat"><p class="hero-stat-val gradient-text">1.2M+</p><p class="hero-stat-label">Active Traders</p></div>
+        <div class="hero-stat"><p class="hero-stat-val gradient-text">0.01ms</p><p class="hero-stat-label">Execution Speed</p></div>
+        <div class="hero-stat"><p class="hero-stat-val gradient-text">150+</p><p class="hero-stat-label">Countries</p></div>
     </div>
 </section>
 
@@ -534,10 +645,10 @@
                         <button style="padding:4px 12px;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:none;font-size:12px;cursor:pointer;">1D</button>
                     </div>
                 </div>
-                <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:4px;">$67,842.50</div>
-                <div style="font-size:13px;color:#22c55e;margin-bottom:20px;">▲ $1,632.20 (+2.47%) past 24h</div>
+                <div class="live-btc-price" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:4px;">$67,842.50</div>
+                <div class="live-btc-change" style="font-size:13px;color:#22c55e;margin-bottom:20px;">▲ $1,632.20 (+2.47%) past 24h</div>
                 <!-- Fake SVG Chart -->
-                <svg viewBox="0 0 400 150" style="width:100%;height:150px;">
+                <svg class="live-btc-chart" viewBox="0 0 400 150" style="width:100%;height:150px;">
                     <defs>
                         <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
@@ -909,15 +1020,29 @@
 <!-- ══════════════════════════════════════════
      NOTIFICATION TOAST
 ══════════════════════════════════════════ -->
-<div id="notification-toast">
-    <div class="notif-icon" style="background:#22c55e; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">
-        <i class="fas fa-check-circle" style="color:#fff;"></i>
+
+<div id="notification-toast" role="status" aria-live="polite">
+    <div class="notif-icon">
+        <i class="fas fa-check-circle"></i>
     </div>
-    <div>
-        <p id="notif-text" style="margin:0; font-size:13px; font-weight:600; color:#111; display:flex; align-items:center; gap:6px; flex-wrap:wrap;"></p>
-        <p id="notif-sub" style="margin:0; font-size:11px; color:#6b7280;">Just now</p>
+
+    <div style="flex: 1; min-width: 0;">
+        <p id="notif-text"
+           style="margin: 0; font-size: 13px; font-weight: 600; color: #111827;">
+            Welcome to NexusHub
+        </p>
+
+        <p id="notif-sub"
+           style="margin: 5px 0 0; font-size: 11px; color: #6b7280;">
+            Platform notifications
+        </p>
     </div>
+
+    <button type="button" id="notif-close" aria-label="Close notification">
+        <i class="fas fa-times"></i>
+    </button>
 </div>
+
 
 <footer style="background:#040404;border-top:1px solid rgba(255,255,255,0.06);padding:64px 1rem 32px;">
     <div class="max-w-7xl mx-auto">
@@ -1072,6 +1197,7 @@ function updateTickerDisplay(symbol, h24) {
 // ── PORTFOLIO CARDS ───────────────────────────────────────────────
 function buildPortfolio() {
     const container = document.getElementById('portfolio-cards');
+    if (!container) return; // element doesn't exist on this page — skip gracefully
     container.innerHTML = portfolioItems.map(item => `
         <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
             <div style="width:36px;height:36px;border-radius:50%;background:${item.color}20;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:${item.color};">${item.symbol.slice(0,2)}</div>
@@ -1309,35 +1435,31 @@ function initWebSocket() {
             updateMarketDisplay(coin);
             updateTickerDisplay(symbol, coin.h24);
 
-            // Update BTC specific widget if it's BTC
+            // Update all live BTC widgets (hero panel + markets section)
             if (symbol === 'BTC') {
-                const btcValEl = document.querySelector('#markets [style*="font-size:2rem"]');
-                if (btcValEl) {
-                    btcValEl.textContent = `$${coin.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                }
-                const btcChangeEl = document.querySelector('#markets [style*="color:#22c55e"]');
-                if (btcChangeEl) {
-                    const priceChange = coin.price * (coin.h24 / 100);
-                    btcChangeEl.textContent = `${coin.h24 >= 0 ? '▲' : '▼'} $${Math.abs(priceChange).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${coin.h24 >= 0 ? '+' : ''}${coin.h24}%) past 24h`;
-                    btcChangeEl.style.color = coin.h24 >= 0 ? '#22c55e' : '#ef4444';
-                }
+                const priceStr = '$' + coin.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const priceChange = coin.price * (coin.h24 / 100);
+                const changeStr = (coin.h24 >= 0 ? '▲ ' : '▼ ') + '$' + Math.abs(priceChange).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' (' + (coin.h24 >= 0 ? '+' : '') + coin.h24 + '%) past 24h';
+                const changeColor = coin.h24 >= 0 ? '#22c55e' : '#ef4444';
 
-                // Update BTC Chart Path
-                const btcPaths = document.querySelectorAll('#markets svg path');
-                if (btcPaths.length >= 2) {
-                    const min = Math.min(...coin.spark);
-                    const max = Math.max(...coin.spark);
-                    const h = 145; // max height in SVG
-                    const w = 400;
-                    const norm = v => h - ((v - min) / (max - min || 1)) * (h - 5);
-                    const pts = coin.spark.map((v, i) => `${(i / (coin.spark.length - 1)) * w},${norm(v)}`);
+                document.querySelectorAll('.live-btc-price').forEach(function (el) { el.textContent = priceStr; });
+                document.querySelectorAll('.live-btc-change').forEach(function (el) { el.textContent = changeStr; el.style.color = changeColor; });
 
-                    const linePath = "M" + pts.join(' L');
-                    const areaPath = linePath + ` L${w},150 L0,150 Z`;
+                const min = Math.min(...coin.spark);
+                const max = Math.max(...coin.spark);
+                const h = 145, w = 400;
+                const norm = v => h - ((v - min) / (max - min || 1)) * (h - 5);
+                const pts = coin.spark.map((v, i) => (i / (coin.spark.length - 1)) * w + ',' + norm(v));
+                const linePath = 'M' + pts.join(' L');
+                const areaPath = linePath + ' L' + w + ',150 L0,150 Z';
 
-                    btcPaths[1].setAttribute('d', linePath);
-                    btcPaths[0].setAttribute('d', areaPath);
-                }
+                document.querySelectorAll('.live-btc-chart').forEach(function (svg) {
+                    const paths = svg.querySelectorAll('path');
+                    if (paths.length >= 2) {
+                        paths[1].setAttribute('d', linePath);
+                        paths[0].setAttribute('d', areaPath);
+                    }
+                });
             }
 
             // Update Portfolio items
@@ -1361,43 +1483,56 @@ initWebSocket();
 // Remove flickerPrices interval as we now use real data
 // setInterval(flickerPrices, 4000);
 
-// ── NOTIFICATIONS ────────────────────────────────────────────────
-const names = ["Michael", "Sarah", "Enock", "Joebat", "Gabriella", "Kidi", "Adam", "Lisa", "James", "Raj", "Tommy", "Ernesto"];
-const actions = ["invested", "withdrew", "earned", "deposited"];
-const amounts = ["10k", "50k", "100k", "250k", "500k", "1M", "5k", "20k"];
+// ── NOTIFICATIONS (single, self-contained loop) ──────────────────
+(function () {
+    const toast    = document.getElementById('notification-toast');
+    const text     = document.getElementById('notif-text');
+    const sub      = document.getElementById('notif-sub');
+    const closeBtn = document.getElementById('notif-close');
+    if (!toast || !text || !sub) return;
 
-const timeAgoList = ["Just now", "2 secs ago", "5 secs ago", "12 secs ago", "28 secs ago", "45 secs ago", "1 min ago"];
+    const names   = ['Michael','Sarah','Enock','Joebat','Gabriella','Kidi','Adam','Lisa','James','Raj','Tommy','Ernesto'];
+    const actions = ['invested','withdrew','earned','deposited'];
+    const amounts = ['5k','10k','20k','50k','100k','250k','500k','1M'];
+    const timeAgo = ['Just now','2s ago','5s ago','12s ago','28s ago','45s ago','1 min ago'];
 
-function scheduleNextNotification() {
-    const randomDelay = Math.floor(Math.random() * 4000) + 2000; // 2s to 6s random interval
+    let dismissed = false;
+    let showTimer, hideTimer;
 
-    setTimeout(() => {
-        const toast = document.getElementById('notification-toast');
-        if (!toast) return;
+    const badge = '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#16a34a;font-size:10px;padding:1px 7px;border-radius:12px;font-weight:700;"><i class="fas fa-check-circle" style="font-size:9px;"></i> Verified</span><br>';
 
-        const name = names[Math.floor(Math.random() * names.length)];
+    function hide() { toast.classList.remove('show'); }
+
+    function show() {
+        if (dismissed) return;
+        const name   = names[Math.floor(Math.random() * names.length)];
         const action = actions[Math.floor(Math.random() * actions.length)];
         const amount = amounts[Math.floor(Math.random() * amounts.length)];
-        const timeAgo = timeAgoList[Math.floor(Math.random() * timeAgoList.length)];
+        const ago    = timeAgo[Math.floor(Math.random() * timeAgo.length)];
 
-        const verifiedBadge = `<span style="display:inline-flex; align-items:center; gap:3px; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); color:#22c55e; font-size:10px; padding:1px 6px; border-radius:12px; font-weight:700;"><i class="fas fa-check-circle" style="font-size:10px;"></i> Verified</span>`;
-
-        document.getElementById('notif-text').innerHTML = `<span>${name}</span> ${verifiedBadge} <span>${action} $${amount}</span>`;
-        document.getElementById('notif-sub').textContent = timeAgo;
+        text.innerHTML  = name + ' ' + badge + ' ' + action + ' <strong>$' + amount + '</strong>';
+        sub.textContent = ago + ' · Community activity';
 
         toast.classList.add('show');
+        hideTimer = setTimeout(function () { hide(); schedule(); }, 3500 + Math.random() * 2000);
+    }
 
-        // Stay visible for random duration (2.5s - 4s)
-        const visibleDuration = Math.floor(Math.random() * 1500) + 2500;
-        setTimeout(() => {
-            toast.classList.remove('show');
-            scheduleNextNotification();
-        }, visibleDuration);
-    }, randomDelay);
-}
+    function schedule() {
+        if (dismissed) return;
+        showTimer = setTimeout(show, 2500 + Math.random() * 1000);
+    }
 
-// Start randomized notification pop-ups loop
-scheduleNextNotification();
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            dismissed = true;
+            clearTimeout(showTimer);
+            clearTimeout(hideTimer);
+            hide();
+        });
+    }
+
+    schedule(); // first popup ~2.5-7.5s after load, then random forever
+})();
 </script>
 </body>
 </html>

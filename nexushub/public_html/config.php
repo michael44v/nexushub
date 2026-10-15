@@ -2,9 +2,9 @@
 //session_start();
 
 $servername = "localhost";
-$username = "htsuktdr_root";
-$password = "victor47009A";
-$dev = "htsuktdr_dev";
+$username = "u596131371_root";
+$password = "victor47009A?";
+$dev = "u596131371_nexus";
 
 // Create connection
 mysqli_report(MYSQLI_REPORT_OFF);
