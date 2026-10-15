@@ -9,7 +9,7 @@
             <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center">
                 <i class="fas fa-chart-line text-black text-lg"></i>
             </div>
-            <span class="font-syne text-xl font-800 gradient-text">vertexxHub</span>
+            <span class="font-syne text-xl font-800 gradient-text">NexusHub</span>
         </div>
         <button id="close-overlay" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white">
             <i class="fas fa-times text-lg"></i>

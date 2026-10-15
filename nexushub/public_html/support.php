@@ -55,7 +55,7 @@ if($chk->num_rows > 0) {
                             <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-4 border-[#0a0a0a] rounded-full"></span>
                         </div>
                         <div>
-                            <h3 class="font-syne font-800 text-white">vertexxHub Support</h3>
+                            <h3 class="font-syne font-800 text-white">NexusHub Support</h3>
                             <p class="text-[10px] text-green-400 font-700 uppercase tracking-widest">Active · 24/7 Agent</p>
                         </div>
                     </div>

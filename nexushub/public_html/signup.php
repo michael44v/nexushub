@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php include 'cdn.php'; include 'config.php';
 
 if(isset($_POST['email'])) {
@@ -29,7 +28,7 @@ if(isset($_POST['email'])) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create Wallet — VertexxHub</title>
+  <title>Create Wallet — NexusHub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -305,7 +304,7 @@ if(isset($_POST['email'])) {
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     </div>
-    <h1>VertexxHub</h1>
+    <h1>NexusHub</h1>
     <p>Web3 Wallet Platform</p>
   </div>
 
@@ -386,153 +385,3 @@ if(isset($_POST['email'])) {
 </div>
 </body>
 </html>
-=======
-<?php
-include 'cdn.php';
-include 'config.php';
-
-$message = '';
-$message_type = '';
-
-if(isset($_POST['email'])) {
-    $pwd = filter($_POST['pwd']);
-    $rpwd = filter($_POST['rpwd']);
-    $match = false;
-    $len = false;
-
-    if($pwd !== $rpwd) {
-        $message = 'Passwords do not match. Try again!';
-        $message_type = 'danger';
-    } else {
-        $match = true;
-    }
-
-    if(strlen($pwd) < 8) {
-        $message = 'Passwords must be at least 8 characters. Try again!';
-        $message_type = 'danger';
-    } else {
-        $len = true;
-    }
-
-    if($match && $len) {
-        $m = filter($_POST['email']);
-        $u = filter($_POST['username']);
-        $chk = $conn->query("select * from user_details where uemail ='$m'");
-        if($chk->num_rows > 0) {
-            $message = 'Error! Email already in use. If you have an account, <a href="/signin/auth" class="underline">Login.</a>';
-            $message_type = 'danger';
-        } else {
-            $put = $conn->query("insert into user_details(uname,uemail,upwd) values('$u','$m','$pwd')");
-            if($put) {
-                $uid = $conn->insert_id;
-                $conn->query("insert into bal(uid,bal) values('$uid','0.00')");
-                ?>
-                <script>window.location.href = '/signin/success';</script>
-                <?php
-                exit;
-            }
-        }
-    }
-}
-?>
-
-<div class="min-h-screen flex items-center justify-center bg-[#050505] px-4 py-12">
-    <!-- Background Glow -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-orange-500/10 rounded-full blur-[120px]"></div>
-        <div class="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-amber-500/10 rounded-full blur-[120px]"></div>
-    </div>
-
-    <div class="relative w-full max-w-md">
-        <!-- Logo -->
-        <div class="flex flex-col items-center mb-8">
-            <div class="w-12 h-12 bg-gradient-gold rounded-xl flex items-center justify-center mb-3 shadow-lg shadow-orange-500/20">
-                <i class="fas fa-bank text-black text-xl"></i>
-            </div>
-            <h1 class="font-syne text-2xl font-800 gradient-text">vertexxHub</h1>
-            <p class="text-gray-400 text-sm mt-1">Professional Trading Platform</p>
-        </div>
-
-        <!-- Card -->
-        <div class="card-dark rounded-3xl p-8 border border-white/10 shadow-2xl">
-            <div class="text-center mb-8">
-                <h2 class="font-syne text-2xl font-700 text-white">Create Wallet</h2>
-                <p class="text-gray-400 text-sm mt-2">Join 1.2M+ traders worldwide</p>
-            </div>
-
-            <?php if($message): ?>
-                <div class="mb-6 p-4 rounded-xl text-sm font-medium <?php echo $message_type == 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'; ?>">
-                    <div class="flex items-start gap-3">
-                        <i class="fas <?php echo $message_type == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'; ?> mt-0.5"></i>
-                        <span><?php echo $message; ?></span>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <form method="post" action="/signup" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1.5 ml-1">Username</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <input type="text" name="username" placeholder="johndoe" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1.5 ml-1">Email Address</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <input type="email" name="email" placeholder="name@example.com" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1.5 ml-1">Password</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <input type="password" name="pwd" placeholder="Min. 8 characters" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1.5 ml-1">Confirm Password</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <input type="password" name="rpwd" placeholder="Repeat password" required
-                            class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit"
-                        class="w-full bg-gradient-gold text-black font-800 py-4 rounded-xl shadow-lg shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 font-syne uppercase tracking-wider">
-                        Create Account <i class="fas fa-arrow-right text-sm"></i>
-                    </button>
-                </div>
-            </form>
-
-            <div class="mt-8 text-center">
-                <p class="text-gray-400 text-sm">
-                    Already have an account?
-                    <a href="/signin/auth" class="text-primary font-700 hover:text-amber-400 transition ml-1">Sign In</a>
-                </p>
-            </div>
-        </div>
-
-        <p class="mt-8 text-center text-[11px] text-gray-600 leading-relaxed max-w-xs mx-auto">
-            By creating an account, you agree to vertexxHub's <a href="#" class="underline">Terms of Service</a> and <a href="#" class="underline">Privacy Policy</a>.
-        </p>
-    </div>
-</div>
->>>>>>> 12268fcf1fa663a3fe6a84e234f859567e0df2f3

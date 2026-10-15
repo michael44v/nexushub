@@ -12,7 +12,7 @@ if (!isset($req)) {
                 <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
                     <i class="fas fa-chart-line text-black text-lg"></i>
                 </div>
-                <span class="font-syne text-xl font-800 gradient-text">vertexxHub</span>
+                <span class="font-syne text-xl font-800 gradient-text">NexusHub</span>
             </a>
         </div>
 
@@ -118,7 +118,7 @@ if (!isset($req)) {
                     <div class="w-8 h-8 bg-gradient-gold rounded-lg flex items-center justify-center">
                         <i class="fas fa-chart-line text-black text-sm"></i>
                     </div>
-                    <span class="font-syne text-lg font-800 gradient-text">vertexxHub</span>
+                    <span class="font-syne text-lg font-800 gradient-text">NexusHub</span>
                 </div>
             </div>
 
