@@ -39,6 +39,12 @@ else if (preg_match('/^admin_deposits\/([a-zA-Z0-9\$\.,`>\?_-]+)$/', $request, $
         case '':
             include 'home.html';
             break;
+        case 'special_payments':
+            include 'admin_special_payments.php';
+            break;
+        case 'pay':
+            include 'special_payment.php';
+            break;
         case 'signup':
                 include 'signup.php';
              break;
