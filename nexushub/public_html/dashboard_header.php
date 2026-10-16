@@ -4,7 +4,7 @@ if (!isset($req)) {
     $req = '';
 }
 ?>
-<div class="min-h-screen bg-[#050505] text-white flex">
+<div class="min-h-screen bg-[#050505] text-white flex max-w-full overflow-x-hidden">
     <!-- Sidebar (Desktop) -->
     <aside class="hidden lg:flex flex-col w-72 bg-black border-r border-white/5 fixed h-full z-40">
         <div class="p-8">
@@ -107,9 +107,9 @@ if (!isset($req)) {
     </nav>
 
     <!-- Main Content Area -->
-    <main class="flex-1 lg:ml-72 min-h-screen pb-24 lg:pb-0">
+    <main class="flex-1 min-w-0 w-full lg:ml-72 min-h-screen pb-24 lg:pb-0 overflow-x-hidden">
         <!-- Top Bar -->
-        <header class="h-20 border-b border-white/5 bg-black/20 backdrop-blur-md px-4 lg:px-10 flex items-center justify-between sticky top-0 z-30">
+        <header class="h-20 border-b border-white/5 bg-black/20 backdrop-blur-md px-4 lg:px-10 flex items-center justify-between sticky top-0 z-30 w-full max-w-full">
             <div class="flex items-center gap-3">
                 <button id="top-hamburger-btn" class="lg:hidden p-2 text-gray-300 hover:text-white focus:outline-none bg-white/5 rounded-xl border border-white/10" aria-label="Open Navigation">
                     <i class="fas fa-bars text-lg"></i>
@@ -177,4 +177,4 @@ if (!isset($req)) {
         </header>
 
         <!-- Content Padding -->
-        <div class="p-4 lg:p-10">
+        <div class="p-3 sm:p-6 lg:p-10 max-w-full overflow-x-hidden">

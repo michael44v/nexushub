@@ -36,7 +36,7 @@ if (strpos($req, "dcid") !== false) {
 include 'admin_header.php';
 ?>
 
-<div class="space-y-8">
+<div class="space-y-6 sm:space-y-8 w-full max-w-full overflow-x-hidden">
 
     <?php if (!empty($alertMsg)): ?>
     <div class="p-4 rounded-xl text-xs font-700 flex items-center gap-2
@@ -47,24 +47,24 @@ include 'admin_header.php';
     <?php endif; ?>
 
     <!-- Withdrawals Section -->
-    <div class="admin-card p-6">
+    <div class="admin-card p-4 sm:p-6">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h3 class="font-syne font-800 text-lg text-white">Withdrawal Requests</h3>
+                <h3 class="font-syne font-800 text-base sm:text-lg text-white">Withdrawal Requests</h3>
                 <p class="text-xs text-gray-400">Review pending user withdrawal requests and approve or decline them.</p>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+        <div class="w-full max-w-full overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-full">
                 <thead>
-                    <tr class="border-b border-white/5 text-[10px] font-800 uppercase tracking-wider text-gray-500">
-                        <th class="py-3 px-4">Txn ID</th>
-                        <th class="py-3 px-4">User ID</th>
-                        <th class="py-3 px-4">Amount</th>
-                        <th class="py-3 px-4">Status</th>
-                        <th class="py-3 px-4">Created At</th>
-                        <th class="py-3 px-4">Action</th>
+                    <tr class="border-b border-white/5 text-[9px] sm:text-[10px] font-800 uppercase tracking-wider text-gray-500">
+                        <th class="py-2.5 px-3">Txn ID</th>
+                        <th class="py-2.5 px-3">User</th>
+                        <th class="py-2.5 px-3">Amount</th>
+                        <th class="py-2.5 px-3">Status</th>
+                        <th class="py-2.5 px-3 hidden sm:table-cell">Created At</th>
+                        <th class="py-2.5 px-3">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5 text-xs">
@@ -77,40 +77,40 @@ include 'admin_header.php';
                             $stat = $row['stat'] ?? 'Pending';
                     ?>
                     <tr class="hover:bg-white/5 transition">
-                        <td class="py-3.5 px-4 font-mono font-700 text-white">#<?php echo $row['txn_id']; ?></td>
-                        <td class="py-3.5 px-4">
-                            <span class="font-700 text-white"><?php echo htmlspecialchars($row['uname'] ?? 'User #'.$row['uid']); ?></span>
-                            <span class="block text-[10px] text-gray-500">UID: #<?php echo $row['uid']; ?></span>
+                        <td class="py-3 px-3 font-mono font-700 text-white">#<?php echo $row['txn_id']; ?></td>
+                        <td class="py-3 px-3">
+                            <span class="font-700 text-white block truncate max-w-[100px] sm:max-w-none"><?php echo htmlspecialchars($row['uname'] ?? 'User #'.$row['uid']); ?></span>
+                            <span class="block text-[9px] text-gray-500">UID: #<?php echo $row['uid']; ?></span>
                         </td>
-                        <td class="py-3.5 px-4 font-syne font-800 text-amber-400">
+                        <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
                             $<?php echo number_format($row['amt'], 2); ?>
                         </td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-3">
                             <?php
                             if ($stat === 'Approved') {
-                                echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-800 px-2.5 py-0.5 rounded-full">Approved</span>';
+                                echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[9px] font-800 px-2 py-0.5 rounded-full">Approved</span>';
                             } elseif ($stat === 'Declined') {
-                                echo '<span class="bg-red-500/10 text-red-400 border border-red-500/30 text-[10px] font-800 px-2.5 py-0.5 rounded-full">Declined</span>';
+                                echo '<span class="bg-red-500/10 text-red-400 border border-red-500/30 text-[9px] font-800 px-2 py-0.5 rounded-full">Declined</span>';
                             } else {
-                                echo '<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-800 px-2.5 py-0.5 rounded-full">Pending</span>';
+                                echo '<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[9px] font-800 px-2 py-0.5 rounded-full">Pending</span>';
                             }
                             ?>
                         </td>
-                        <td class="py-3.5 px-4 text-gray-400">
+                        <td class="py-3 px-3 text-gray-400 hidden sm:table-cell">
                             <?php echo htmlspecialchars($row['created_at'] ?? $row['tm'] ?? 'N/A'); ?>
                         </td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-3">
                             <?php if ($stat === 'Pending' || $stat === 'Processing'): ?>
-                                <div class="flex items-center gap-2">
-                                    <a href="/admin_deposits/apid<?php echo $row['txn_id']; ?>" class="bg-green-500 hover:bg-green-400 text-black px-3 py-1 rounded-lg text-[11px] font-800 transition">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <a href="/admin_deposits/apid<?php echo $row['txn_id']; ?>" class="bg-green-500 hover:bg-green-400 text-black px-2.5 py-1 rounded-lg text-[10px] font-800 transition">
                                         Approve
                                     </a>
-                                    <a href="/admin_deposits/dcid<?php echo $row['txn_id']; ?>" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/30 px-3 py-1 rounded-lg text-[11px] font-800 transition">
+                                    <a href="/admin_deposits/dcid<?php echo $row['txn_id']; ?>" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/30 px-2.5 py-1 rounded-lg text-[10px] font-800 transition">
                                         Decline
                                     </a>
                                 </div>
                             <?php else: ?>
-                                <span class="text-gray-500 text-[11px]">Completed</span>
+                                <span class="text-gray-500 text-[10px]">Completed</span>
                             <?php endif; ?>
                         </td>
                     </tr>
