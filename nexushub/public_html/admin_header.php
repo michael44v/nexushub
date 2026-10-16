@@ -36,6 +36,8 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
             background-color: #07080a;
             color: #e8eaf0;
             font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+            max-width: 100vw;
         }
         .font-syne { font-family: 'Syne', sans-serif; }
         .gradient-gold-text {
@@ -51,6 +53,7 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 1.25rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            max-width: 100%;
         }
         .admin-nav-item {
             display: flex;
@@ -82,9 +85,9 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen max-w-full overflow-x-hidden">
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen max-w-full overflow-x-hidden">
     <!-- Unified Admin Sidebar -->
     <aside class="w-72 bg-[#0c0e14] border-r border-white/5 fixed inset-y-0 left-0 z-40 flex flex-col hidden lg:flex">
         <!-- Brand Header -->
@@ -175,27 +178,27 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 lg:ml-72 min-h-screen flex flex-col">
+    <div class="flex-1 lg:ml-72 min-h-screen flex flex-col max-w-full overflow-x-hidden">
         <!-- Top Admin Header -->
-        <header class="h-20 bg-[#0c0e14]/80 backdrop-blur-md border-b border-white/5 px-6 lg:px-10 flex items-center justify-between sticky top-0 z-30">
-            <div class="flex items-center gap-4">
-                <button id="mobileAdminMenuBtn" class="lg:hidden text-gray-400 hover:text-white text-xl">
+        <header class="h-20 bg-[#0c0e14]/80 backdrop-blur-md border-b border-white/5 px-4 sm:px-6 lg:px-10 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-3">
+                <button id="mobileAdminMenuBtn" class="lg:hidden text-gray-400 hover:text-white text-lg p-2 bg-white/5 rounded-xl border border-white/10">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h2 class="font-syne font-800 text-xl text-white">
+                <h2 class="font-syne font-800 text-base sm:text-xl text-white truncate max-w-[180px] sm:max-w-none">
                     <?php
                     if (strpos($currentUri, '/user_management') !== false) echo "User Management";
                     elseif (strpos($currentUri, '/admin_deposits') !== false) echo "Deposits & Withdrawals";
                     elseif (strpos($currentUri, '/special_payments') !== false) echo "Special Crypto Payments";
                     elseif (strpos($currentUri, '/profits') !== false) echo "Profits & ROI Settings";
                     elseif (strpos($currentUri, '/messenger') !== false) echo "Live Messenger";
-                    elseif (strpos($currentUri, '/admin_kyc') !== false) echo "KYC Document Verification";
+                    elseif (strpos($currentUri, '/admin_kyc') !== false) echo "KYC Verification";
                     else echo "Admin Dashboard";
                     ?>
                 </h2>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-3 sm:gap-6">
                 <div class="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full text-emerald-400 text-xs font-700">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     Admin Active
@@ -213,4 +216,4 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
         </header>
 
         <!-- Main Body Wrapper -->
-        <main class="flex-1 p-6 lg:p-10">
+        <main class="flex-1 p-3 sm:p-6 lg:p-10 max-w-full overflow-x-hidden">
