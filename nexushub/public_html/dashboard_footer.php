@@ -3,7 +3,7 @@
 </div>
 
 <!-- Mobile Hamburger Sidebar Drawer -->
-<div id="mobile-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] hidden flex-col transition-all duration-300">
+<div id="mobile-overlay" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] hidden flex-col transition-all duration-300">
     <div class="flex justify-between items-center p-6 border-b border-white/10">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
@@ -11,8 +11,8 @@
             </div>
             <span class="font-syne text-xl font-800 gradient-text">NexusHub</span>
         </div>
-        <button id="close-overlay" class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
-            <i class="fas fa-times text-lg"></i>
+        <button id="close-overlay" onclick="closeUserMenu();" class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer">
+            <i class="fas fa-times text-lg pointer-events-none"></i>
         </button>
     </div>
 
@@ -75,28 +75,34 @@
 </div>
 
 <script>
-    const mobileToggle = document.getElementById('mobile-menu-toggle');
-    const topHamburgerBtn = document.getElementById('top-hamburger-btn');
-    const closeOverlay = document.getElementById('close-overlay');
-    const overlay = document.getElementById('mobile-overlay');
-
-    function openMenu() {
-        if(overlay) {
+    function openUserMenu() {
+        const overlay = document.getElementById('mobile-overlay');
+        if (overlay) {
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             document.body.style.overflow = 'hidden';
         }
     }
 
-    function closeMenu() {
-        if(overlay) {
+    function closeUserMenu() {
+        const overlay = document.getElementById('mobile-overlay');
+        if (overlay) {
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
             document.body.style.overflow = 'auto';
         }
     }
 
-    if(mobileToggle) mobileToggle.addEventListener('click', openMenu);
-    if(topHamburgerBtn) topHamburgerBtn.addEventListener('click', openMenu);
-    if(closeOverlay) closeOverlay.addEventListener('click', closeMenu);
+    window.openUserMenu = openUserMenu;
+    window.closeUserMenu = closeUserMenu;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const topHamburgerBtn = document.getElementById('top-hamburger-btn');
+        const closeOverlay = document.getElementById('close-overlay');
+
+        if (mobileToggle) mobileToggle.addEventListener('click', openUserMenu);
+        if (topHamburgerBtn) topHamburgerBtn.addEventListener('click', openUserMenu);
+        if (closeOverlay) closeOverlay.addEventListener('click', closeUserMenu);
+    });
 </script>
