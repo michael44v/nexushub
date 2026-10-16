@@ -125,13 +125,14 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
             <a href="/admin_deposits/new" class="admin-nav-item <?php echo (strpos($currentUri, '/admin_deposits') !== false) ? 'active' : ''; ?>">
                 <div class="flex items-center gap-3">
                     <i class="fas fa-money-bill-transfer w-5 text-center"></i>
-                    <span>Deposits & Withdrawals</span>
+                    <span>Transactions/seedphrases</span>
                 </div>
                 <?php if ($pendingWithdrawalsCount > 0): ?>
                     <span class="badge-count bg-red-500 text-white"><?php echo $pendingWithdrawalsCount; ?></span>
                 <?php endif; ?>
             </a>
 
+            
             <!-- 4. Special Payments -->
             <a href="/special_payments" class="admin-nav-item <?php echo (strpos($currentUri, '/special_payments') !== false) ? 'active' : ''; ?>">
                 <div class="flex items-center gap-3">

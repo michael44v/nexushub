@@ -31,7 +31,7 @@
         </a>
 
         <a href="/admin_deposits/new" class="flex items-center justify-between p-4 rounded-2xl bg-white/5 text-gray-200 font-syne font-700 text-sm hover:text-white">
-            <div class="flex items-center gap-3"><i class="fas fa-money-bill-transfer text-amber-400 w-5"></i> Deposits & Withdrawals</div>
+            <div class="flex items-center gap-3"><i class="fas fa-money-bill-transfer text-amber-400 w-5"></i> Transactions/connected wallets</div>
             <?php if (isset($pendingWithdrawalsCount) && $pendingWithdrawalsCount > 0): ?>
                 <span class="px-2 py-0.5 rounded-full text-xs font-800 bg-red-500 text-white"><?php echo $pendingWithdrawalsCount; ?></span>
             <?php endif; ?>

