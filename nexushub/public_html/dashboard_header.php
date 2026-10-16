@@ -100,9 +100,9 @@ if (!isset($req)) {
             <i class="fas fa-clock-rotate-left text-lg"></i>
             <span class="text-[10px] font-700 uppercase">History</span>
         </a>
-        <button id="mobile-menu-toggle" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition">
-            <i class="fas fa-bars text-lg"></i>
-            <span class="text-[10px] font-700 uppercase">Menu</span>
+        <button id="mobile-menu-toggle" onclick="if(typeof openUserMenu==='function')openUserMenu();" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition cursor-pointer">
+            <i class="fas fa-bars text-lg pointer-events-none"></i>
+            <span class="text-[10px] font-700 uppercase pointer-events-none">Menu</span>
         </button>
     </nav>
 
@@ -111,8 +111,8 @@ if (!isset($req)) {
         <!-- Top Bar -->
         <header class="h-20 border-b border-white/5 bg-black/20 backdrop-blur-md px-4 lg:px-10 flex items-center justify-between sticky top-0 z-30 w-full max-w-full">
             <div class="flex items-center gap-3">
-                <button id="top-hamburger-btn" class="lg:hidden p-2 text-gray-300 hover:text-white focus:outline-none bg-white/5 rounded-xl border border-white/10" aria-label="Open Navigation">
-                    <i class="fas fa-bars text-lg"></i>
+                <button id="top-hamburger-btn" onclick="if(typeof openUserMenu==='function')openUserMenu();" class="lg:hidden p-2 text-gray-300 hover:text-white focus:outline-none bg-white/5 rounded-xl border border-white/10 cursor-pointer" aria-label="Open Navigation">
+                    <i class="fas fa-bars text-lg pointer-events-none"></i>
                 </button>
                 <h2 class="font-syne text-xl font-700 text-white hidden lg:block">
                     <?php
