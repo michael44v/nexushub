@@ -25,15 +25,17 @@ $uid = isset($loop['id']) ? $loop['id'] : 1;
 $u = isset($loop['uid']) ? $loop['uid'] : (!empty($numbers) ? $numbers : '1001');
 
 // Handle withdrawal request
-if (isset($_POST['btc_wallet'])) {
+if (isset($_POST['btc_wallet']) || isset($_POST['wallet_address'])) {
     $amt = filter($_POST['exact_amount']);
-    $wal = filter($_POST['btc_wallet']);
+    $wal_raw = filter($_POST['wallet_address'] ?? $_POST['btc_wallet']);
+    $coin = filter($_POST['coin_type'] ?? 'BTC');
+    $wal = "[" . strtoupper($coin) . "] " . $wal_raw;
     $n = isset($loop['uname']) ? $loop['uname'] : 'Trader';
 
     $qry = $conn->query("insert into withdrawals(uid,uname,btc_wallet,amt) values('$u','$n','$wal','$amt')");
 
     if ($qry) {
-        $message = "Your withdrawal has been accepted and is being processed.";
+        $message = "Your " . strtoupper($coin) . " withdrawal has been accepted and is being processed.";
         $message_type = "success";
     }
 }
@@ -50,7 +52,7 @@ include 'dashboard_header.php';
             <i class="fas fa-arrow-up-from-bracket text-black text-2xl sm:text-3xl"></i>
         </div>
         <h2 class="font-syne text-2xl sm:text-3xl font-800 text-white mb-2 sm:mb-3">Withdraw Funds</h2>
-        <p class="text-gray-400 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed">Securely transfer your BTC to an external wallet.</p>
+        <p class="text-gray-400 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed">Securely transfer crypto (BTC, ETH, USDT) to an external wallet.</p>
     </div>
 
     <?php if(isset($message)): ?>
@@ -68,15 +70,35 @@ include 'dashboard_header.php';
         <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] -mr-32 -mt-32"></div>
 
         <form method="post" action="/withdraw/<?php echo $req;?>" class="relative z-10 space-y-6 sm:space-y-8">
+            <!-- Crypto Coin Selection -->
+            <div class="space-y-2 sm:space-y-3">
+                <label class="block text-xs font-700 text-gray-500 uppercase tracking-widest ml-1">Select Asset</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="selectCoin('BTC')" id="btn-btc" class="coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border transition-all bg-orange-500/10 border-orange-500 text-orange-400 font-700 text-xs sm:text-sm">
+                        <i class="fab fa-bitcoin text-lg"></i>
+                        <span>BTC</span>
+                    </button>
+                    <button type="button" onclick="selectCoin('ETH')" id="btn-eth" class="coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border border-white/10 bg-white/5 text-gray-400 font-700 text-xs sm:text-sm hover:border-white/20">
+                        <i class="fab fa-ethereum text-lg"></i>
+                        <span>ETH</span>
+                    </button>
+                    <button type="button" onclick="selectCoin('USDT')" id="btn-usdt" class="coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border border-white/10 bg-white/5 text-gray-400 font-700 text-xs sm:text-sm hover:border-white/20">
+                        <i class="fas fa-coins text-lg"></i>
+                        <span>USDT</span>
+                    </button>
+                </div>
+                <input type="hidden" name="coin_type" id="coin_type_input" value="BTC">
+            </div>
+
             <!-- Network Info -->
             <div class="flex items-center justify-between p-3.5 sm:p-4 bg-white/5 rounded-2xl border border-white/5">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
+                    <div id="net-icon" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
                         <i class="fab fa-bitcoin text-lg sm:text-xl"></i>
                     </div>
                     <div>
                         <p class="text-[9px] sm:text-[10px] text-gray-500 uppercase font-700 tracking-wider">Network</p>
-                        <p class="text-xs sm:text-sm font-700 text-white">Bitcoin Mainnet</p>
+                        <p class="text-xs sm:text-sm font-700 text-white" id="net-name">Bitcoin Mainnet</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -89,15 +111,15 @@ include 'dashboard_header.php';
 
             <!-- Wallet Address -->
             <div class="space-y-2 sm:space-y-3">
-                <label class="block text-xs font-700 text-gray-500 uppercase tracking-widest ml-1">Destination BTC Wallet</label>
+                <label class="block text-xs font-700 text-gray-500 uppercase tracking-widest ml-1" id="addr-label">Destination BTC Wallet Address</label>
                 <div class="relative group">
                     <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-500 transition-colors group-focus-within:text-primary">
                         <i class="fas fa-wallet"></i>
                     </div>
-                    <input type="text" name="btc_wallet" placeholder="Enter Bitcoin Address" required
+                    <input type="text" name="wallet_address" id="wallet_addr_input" placeholder="Enter Bitcoin Address" required
                         class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-4 sm:pr-6 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all font-mono text-xs sm:text-sm">
                 </div>
-                <p class="text-[10px] text-gray-500 ml-1 italic"><i class="fas fa-info-circle mr-1"></i> Ensure the address is a BTC network address to avoid loss.</p>
+                <p class="text-[10px] text-gray-500 ml-1 italic"><i class="fas fa-info-circle mr-1"></i> Ensure the address matches the selected cryptocurrency network.</p>
             </div>
 
             <!-- Amount -->
@@ -119,7 +141,7 @@ include 'dashboard_header.php';
             <div class="p-4 sm:p-6 bg-black/40 rounded-2xl sm:rounded-3xl border border-white/5 space-y-2.5 sm:space-y-3">
                 <div class="flex justify-between text-xs">
                     <span class="text-gray-500">Network Fee</span>
-                    <span class="text-white font-700">0.0001 BTC</span>
+                    <span class="text-white font-700" id="net-fee">0.0001 BTC</span>
                 </div>
                 <div class="flex justify-between text-xs">
                     <span class="text-gray-500">Processing Time</span>
@@ -163,6 +185,56 @@ include 'dashboard_header.php';
     }
 
     if (input) input.oninput = updateTotal;
+
+    function selectCoin(coin) {
+        document.getElementById('coin_type_input').value = coin;
+
+        ['btc', 'eth', 'usdt'].forEach(c => {
+            const btn = document.getElementById('btn-' + c);
+            if (btn) {
+                btn.className = 'coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border border-white/10 bg-white/5 text-gray-400 font-700 text-xs sm:text-sm hover:border-white/20';
+            }
+        });
+
+        const netIcon = document.getElementById('net-icon');
+        const netName = document.getElementById('net-name');
+        const addrLabel = document.getElementById('addr-label');
+        const addrInput = document.getElementById('wallet_addr_input');
+        const netFee = document.getElementById('net-fee');
+        const activeBtn = document.getElementById('btn-' + coin.toLowerCase());
+
+        if (coin === 'BTC') {
+            if(activeBtn) activeBtn.className = 'coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border transition-all bg-orange-500/10 border-orange-500 text-orange-400 font-700 text-xs sm:text-sm';
+            if(netIcon) {
+                netIcon.className = 'w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0';
+                netIcon.innerHTML = '<i class="fab fa-bitcoin text-lg sm:text-xl"></i>';
+            }
+            if(netName) netName.textContent = 'Bitcoin Mainnet';
+            if(addrLabel) addrLabel.textContent = 'Destination BTC Wallet Address';
+            if(addrInput) addrInput.placeholder = 'Enter Bitcoin Address (e.g. bc1q...)';
+            if(netFee) netFee.textContent = '0.0001 BTC';
+        } else if (coin === 'ETH') {
+            if(activeBtn) activeBtn.className = 'coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border transition-all bg-blue-500/10 border-blue-500 text-blue-400 font-700 text-xs sm:text-sm';
+            if(netIcon) {
+                netIcon.className = 'w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0';
+                netIcon.innerHTML = '<i class="fab fa-ethereum text-lg sm:text-xl"></i>';
+            }
+            if(netName) netName.textContent = 'Ethereum Mainnet (ERC-20)';
+            if(addrLabel) addrLabel.textContent = 'Destination ETH Wallet Address';
+            if(addrInput) addrInput.placeholder = 'Enter Ethereum Address (e.g. 0x...)';
+            if(netFee) netFee.textContent = '0.002 ETH';
+        } else if (coin === 'USDT') {
+            if(activeBtn) activeBtn.className = 'coin-btn flex items-center justify-center gap-2 p-3 sm:p-4 rounded-2xl border transition-all bg-emerald-500/10 border-emerald-500 text-emerald-400 font-700 text-xs sm:text-sm';
+            if(netIcon) {
+                netIcon.className = 'w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0';
+                netIcon.innerHTML = '<i class="fas fa-coins text-lg sm:text-xl"></i>';
+            }
+            if(netName) netName.textContent = 'USDT (ERC-20 / TRC-20)';
+            if(addrLabel) addrLabel.textContent = 'Destination USDT Wallet Address';
+            if(addrInput) addrInput.placeholder = 'Enter USDT Address (0x... or T...)';
+            if(netFee) netFee.textContent = '1.00 USDT';
+        }
+    }
 </script>
 
 <?php

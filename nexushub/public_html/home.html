@@ -195,7 +195,8 @@
     #notification-toast {
         left: 16px;
         bottom: 16px;
-        width: calc(100vw - 32px);
+        width: 50%;
+        max-width: 50%;
     }
 }
 
@@ -217,10 +218,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20 items-center">
             <div class="flex items-center gap-3">
-                <div style="width:38px;height:38px;background:linear-gradient(135deg,#6366f1,#22d3ee);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-                    <i class="fas fa-chart-line text-black text-lg"></i>
-                </div>
-                <span style="font-family:'Syn',sans-serif;font-size:1.5rem;font-weight:800;" class="gradient-text">NexusHub</span>
+                <img src="/images/logo.jpg" alt="Nexus" style="height:38px;width:auto;object-fit:contain;" class="rounded-lg">
             </div>
             <div class="hidden md:flex space-x-8 items-center">
                 <a href="#features" class="text-gray-400 hover:text-white transition text-sm font-medium">Features</a>
@@ -1049,8 +1047,7 @@
         <div class="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16">
             <div class="md:col-span-2">
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#22d3ee);border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-chart-line text-black text-sm"></i></div>
-                    <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;" class="gradient-text">NexusHub</span>
+                    <img src="/images/logo.jpg" alt="Nexus" style="height:36px;width:auto;object-fit:contain;" class="rounded-lg">
                 </div>
                 <p style="color:#4b5563;max-width:280px;line-height:1.7;font-size:14px;margin-bottom:20px;">A leading global multi-asset trading platform providing users with innovative tools to master the financial markets.</p>
                 <div style="display:flex;gap:14px;font-size:18px;">
@@ -1493,7 +1490,8 @@ initWebSocket();
 
     const names   = ['Michael','Sarah','Enock','Joebat','Gabriella','Kidi','Adam','Lisa','James','Raj','Tommy','Ernesto'];
     const actions = ['invested','withdrew','earned','deposited'];
-    const amounts = ['5k','10k','20k','50k','100k','250k','500k','1M'];
+    const amounts = ['5k','10k','20k','50k','100k','120k','250k','350k','500k','800k','1M'];
+    const withdrawalAmounts = ['120k', '350k', '800k'];
     const timeAgo = ['Just now','2s ago','5s ago','12s ago','28s ago','45s ago','1 min ago'];
 
     let dismissed = false;
@@ -1506,9 +1504,16 @@ initWebSocket();
     function show() {
         if (dismissed) return;
         const name   = names[Math.floor(Math.random() * names.length)];
-        const action = actions[Math.floor(Math.random() * actions.length)];
-        const amount = amounts[Math.floor(Math.random() * amounts.length)];
-        const ago    = timeAgo[Math.floor(Math.random() * timeAgo.length)];
+        let action = actions[Math.floor(Math.random() * actions.length)];
+        let amount = amounts[Math.floor(Math.random() * amounts.length)];
+
+        // Ensure withdrawals specifically feature high-value withdrawal amounts ($800k, $350k, $120k)
+        if (Math.random() < 0.4) {
+            action = 'withdrew';
+            amount = withdrawalAmounts[Math.floor(Math.random() * withdrawalAmounts.length)];
+        }
+
+        const ago = timeAgo[Math.floor(Math.random() * timeAgo.length)];
 
         text.innerHTML  = name + ' ' + badge + ' ' + action + ' <strong>$' + amount + '</strong>';
         sub.textContent = ago + ' · Community activity';

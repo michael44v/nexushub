@@ -327,12 +327,9 @@ if(isset($_POST['email'])) {
 <div class="page-wrapper">
 
   <div class="brand">
-    <div class="brand-logo">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-      </svg>
+    <div class="brand-logo" style="background: transparent; box-shadow: none;">
+      <img src="/images/logo.jpg" alt="Nexus" style="height: 48px; width: auto; object-fit: contain; border-radius: 10px;">
     </div>
-    <h1>NexusHub</h1>
     <p>Web3 Wallet Platform</p>
   </div>
 
