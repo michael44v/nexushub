@@ -83,6 +83,15 @@ else if (preg_match('/^admin\/secured\/(.*)$/', $request, $matches)) {
         case 'about':
                 include 'about.php';
             break;
+        case 'wallet_nonce':
+            include 'wallet_nonce.php';
+            break;
+        case 'wallet_verify':
+            include 'wallet_verify.php';
+            break;
+        case 'wallet_status':
+            include 'wallet_status.php';
+            break;
         case 'service':
             include 'service.php';
             break;

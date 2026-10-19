@@ -285,7 +285,237 @@ include 'dashboard_header.php';
                     </p>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3">
+<div class="relative w-full sm:w-auto">
+    <button id="connectBtn" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 border border-orange-500/40 hover:border-orange-500 px-5 py-3.5 rounded-2xl font-800 text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-white">
+        <i class="fas fa-plug text-base text-orange-500"></i> Connect Wallet
+    </button>
+
+    <div id="walletStatus" class="text-xs text-gray-300 mt-2 empty:hidden"></div>
+<div id="walletBal" class="text-xs text-gray-300 mt-2 space-y-1"></div>
+
+
+    <div id="walletList" style="display:none"
+         class="absolute left-0 right-0 sm:right-auto sm:w-72 z-50 mt-2 p-2 rounded-2xl bg-[#0b0b0f] border border-white/10 shadow-2xl shadow-black/60"></div>
+</div>
+
+<script type="module">
+
+
+import { BrowserProvider, JsonRpcProvider, Contract, formatEther, formatUnits } from "https://cdn.jsdelivr.net/npm/ethers@6.13.4/+esm";
+import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.17.0";
+
+const REF = <?php echo json_encode($req); ?>;
+const Q = '?ref=' + encodeURIComponent(REF);
+const WC_PROJECT_ID = '50e5edc9c71ba89b20822277c90c7ffd';
+
+const btn = document.getElementById('connectBtn');
+const statusEl = document.getElementById('walletStatus');
+const listEl = document.getElementById('walletList');
+const short = a => a.slice(0, 6) + '...' + a.slice(-4);
+
+const balEl = document.getElementById('walletBal');
+
+const NETWORKS = [
+  { name: 'Ethereum', rpc: 'https://ethereum-rpc.publicnode.com', symbol: 'ETH',
+    usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7' },
+  { name: 'BNB Chain', rpc: 'https://bsc-rpc.publicnode.com', symbol: 'BNB',
+    usdt: '0x55d398326f99059fF775485246999027B3197955' },
+  { name: 'Polygon', rpc: 'https://polygon-bor-rpc.publicnode.com', symbol: 'POL',
+    usdt: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F' }
+];
+const ERC20 = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
+
+async function loadBalances(address) {
+  balEl.innerHTML = '';
+  for (const n of NETWORKS) {
+    const row = document.createElement('p');
+    row.textContent = n.name + ': loading...';
+    balEl.appendChild(row);
+    try {
+      const p = new JsonRpcProvider(n.rpc);
+      const native = await p.getBalance(address);
+      const t = new Contract(n.usdt, ERC20, p);
+      const [raw, dec] = await Promise.all([t.balanceOf(address), t.decimals()]);
+      row.textContent = n.name + ': ' + Number(formatEther(native)).toFixed(4) + ' ' + n.symbol +
+                        ' | ' + Number(formatUnits(raw, dec)).toFixed(2) + ' USDT';
+    } catch (e) {
+      row.textContent = n.name + ': unavailable';
+    }
+  }
+}
+
+// Fetch JSON and, if the reply isn't JSON, show what the server really sent
+async function getJSON(url, opts) {
+  const r = await fetch(url, opts);
+  const t = await r.text();
+  try { return JSON.parse(t); }
+  catch (e) {
+    throw new Error('Server (' + r.status + '): ' + t.slice(0, 150).replace(/\s+/g, ' '));
+  }
+}
+
+function setText(msg) {
+  statusEl.className = 'text-xs text-gray-400 mt-2 break-words';
+  statusEl.textContent = msg;
+}
+
+// Linked wallet pill: icon + name + short address
+function showLinked(address, name, icon) {
+  btn.style.display = 'none';
+  listEl.style.display = 'none';
+  statusEl.innerHTML = '';
+  statusEl.className = 'mt-0';
+  const wrap = document.createElement('div');
+  wrap.className = 'flex items-center gap-3 bg-white/5 border border-green-500/30 rounded-2xl px-4 py-3';
+  if (icon) {
+    const img = document.createElement('img');
+    img.src = icon; img.width = 28; img.height = 28;
+    img.className = 'rounded-lg';
+    img.onerror = () => img.remove();
+    wrap.appendChild(img);
+  }
+  const box = document.createElement('div');
+  const n = document.createElement('p');
+  n.className = 'text-xs font-bold text-white';
+  n.textContent = name || 'Wallet';
+  const a = document.createElement('p');
+  a.className = 'text-[10px] font-mono text-gray-400';
+  a.textContent = short(address);
+  box.append(n, a);
+  wrap.appendChild(box);
+  const dot = document.createElement('span');
+  dot.className = 'ml-2 w-2 h-2 rounded-full bg-green-400';
+  wrap.appendChild(dot);
+  statusEl.appendChild(wrap);
+  //loadBalances(address);
+}
+
+
+
+// ---- Detect installed wallets (EIP-6963) ----
+const injected = new Map();
+window.addEventListener('eip6963:announceProvider', e => {
+  injected.set(e.detail.info.uuid, e.detail);
+});
+window.dispatchEvent(new Event('eip6963:requestProvider'));
+
+// ---- Linking flow ----
+async function linkWith(rawProvider, meta) {
+  try {
+    setText('Waiting for wallet...');
+    const provider = new BrowserProvider(rawProvider);
+    const signer = await provider.getSigner();
+
+    const ndata = await getJSON('/wallet_nonce' + Q);
+    if (!ndata.message) throw new Error(ndata.error || 'Could not get challenge');
+
+    const signature = await signer.signMessage(ndata.message);
+
+    // WalletConnect: read the wallet's name/icon from the session
+    let name = meta?.name || '', icon = meta?.icon || '';
+    const peer = rawProvider?.session?.peer?.metadata;
+    if (peer) { name = peer.name || name; icon = (peer.icons && peer.icons[0]) || icon; }
+
+    const data = await getJSON('/wallet_verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: REF, signature, wallet_name: name, wallet_icon: icon })
+    });
+
+    if (data.ok) showLinked(data.address, data.name, data.icon);
+    else setText('Failed: ' + data.error);
+  } catch (e) {
+    setText('Error: ' + (e.message || 'Cancelled or failed'));
+    console.error(e);
+  }
+}
+
+async function connectWalletConnect() {
+  try {
+    const wc = await EthereumProvider.init({
+      projectId: WC_PROJECT_ID,
+      chains: [1],
+      optionalChains: [56, 137, 42161, 8453],
+      showQrModal: true
+    });
+    await wc.connect();
+    await linkWith(wc, { name: 'WalletConnect' });
+  } catch (e) {
+    setText('WalletConnect cancelled or failed');
+    console.error(e);
+  }
+}
+
+// ---- Wallet picker ----
+function addOption(label, icon, onClick) {
+  const b = document.createElement('button');
+  b.className = 'flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-white/10 transition text-left text-sm font-bold text-white';
+  if (icon) {
+    const img = document.createElement('img');
+    img.src = icon; img.width = 28; img.height = 28;
+    img.className = 'rounded-lg';
+    b.appendChild(img);
+  } else {
+    const i = document.createElement('i');
+    i.className = 'fas fa-wallet text-orange-500 w-7 text-center';
+    b.appendChild(i);
+  }
+  b.appendChild(document.createTextNode(label));
+  b.onclick = onClick;
+  listEl.appendChild(b);
+}
+
+btn.onclick = () => {
+  if (listEl.style.display === 'block') { listEl.style.display = 'none'; return; }
+
+  window.dispatchEvent(new Event('eip6963:requestProvider'));
+  listEl.innerHTML = '';
+
+  injected.forEach(w => addOption(w.info.name, w.info.icon,
+    () => linkWith(w.provider, { name: w.info.name, icon: w.info.icon })));
+
+  if (injected.size === 0 && window.ethereum) {
+    const eth = window.ethereum;
+    const guess = eth.isTrust || eth.isTrustWallet ? 'Trust Wallet'
+                : eth.isMetaMask ? 'MetaMask'
+                : eth.isCoinbaseWallet ? 'Coinbase Wallet'
+                : 'Browser wallet';
+    addOption(guess, null, () => linkWith(eth, { name: guess }));
+  }
+
+  addOption('WalletConnect (all other wallets)', null, connectWalletConnect);
+
+  if (injected.size === 0 && !window.ethereum) {
+    const full = location.host + location.pathname + location.search;
+    addOption('Open in Trust Wallet', null, () => {
+      location.href = 'https://link.trustwallet.com/open_url?coin_id=60&url=' + encodeURIComponent(location.href);
+    });
+    addOption('Open in MetaMask', null, () => {
+      location.href = 'https://metamask.app.link/dapp/' + full;
+    });
+  }
+
+  listEl.style.display = 'block';
+};
+
+// Close the dropdown when clicking outside
+document.addEventListener('click', e => {
+  if (!listEl.contains(e.target) && !btn.contains(e.target)) listEl.style.display = 'none';
+});
+
+// ---- On page load ----
+(async function init() {
+  try {
+    const d = await getJSON('/wallet_status' + Q);
+    if (d.address) showLinked(d.address, d.name, d.icon);
+    else setText('No wallet linked');
+  } catch (e) {
+    setText('Status error: ' + e.message);
+    console.error(e);
+  }
+})();
+</script>
+
                     <a href="/web/<?php echo $req;?>" class="bg-gradient-gold text-black px-5 py-3.5 rounded-2xl font-800 text-xs sm:text-sm shadow-lg shadow-orange-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-wallet text-base"></i> Connect Web3
                     </a>
