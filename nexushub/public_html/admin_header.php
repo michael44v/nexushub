@@ -92,12 +92,9 @@ if ($kRes && $row = $kRes->fetch_assoc()) {
     <aside class="w-72 bg-[#0c0e14] border-r border-white/5 fixed inset-y-0 left-0 z-40 flex flex-col hidden lg:flex">
         <!-- Brand Header -->
         <div class="p-6 border-b border-white/5 flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 text-black font-800 text-lg">
-                <i class="fas fa-shield-halved"></i>
-            </div>
+            <img src="/images/logo.jpg" alt="Nexus" class="h-9 w-auto object-contain rounded-lg">
             <div>
-                <h1 class="font-syne font-800 text-lg text-white leading-tight">NexusHub</h1>
-                <span class="text-[10px] uppercase tracking-widest text-amber-400 font-700">Admin Control</span>
+                <span class="text-[10px] uppercase tracking-widest text-amber-400 font-700 block">Admin Control</span>
             </div>
         </div>
 

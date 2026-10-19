@@ -9,10 +9,7 @@ if (!isset($req)) {
     <aside class="hidden lg:flex flex-col w-72 bg-black border-r border-white/5 fixed h-full z-40">
         <div class="p-8">
             <a href="/" class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                    <i class="fas fa-chart-line text-black text-lg"></i>
-                </div>
-                <span class="font-syne text-xl font-800 gradient-text">NexusHub</span>
+                <img src="/images/logo.jpg" alt="Nexus" class="h-9 w-auto object-contain rounded-lg">
             </a>
         </div>
 
@@ -126,10 +123,7 @@ if (!isset($req)) {
                     ?>
                 </h2>
                 <div class="lg:hidden flex items-center gap-2">
-                    <div class="w-8 h-8 bg-gradient-gold rounded-lg flex items-center justify-center shadow-md shadow-orange-500/20">
-                        <i class="fas fa-chart-line text-black text-sm"></i>
-                    </div>
-                    <span class="font-syne text-lg font-800 gradient-text">NexusHub</span>
+                    <img src="/images/logo.jpg" alt="Nexus" class="h-8 w-auto object-contain rounded-lg">
                 </div>
             </div>
 

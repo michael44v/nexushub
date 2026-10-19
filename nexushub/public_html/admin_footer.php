@@ -6,11 +6,8 @@
 <div id="adminMobileDrawer" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[60] hidden flex-col">
     <div class="p-6 border-b border-white/10 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center text-black font-800 text-lg">
-                <i class="fas fa-shield-halved"></i>
-            </div>
+            <img src="/images/logo.jpg" alt="Nexus" class="h-9 w-auto object-contain rounded-lg">
             <div>
-                <h2 class="font-syne font-800 text-lg text-white">NexusHub Admin</h2>
                 <p class="text-[10px] text-amber-400 font-700 uppercase tracking-widest">Control Panel</p>
             </div>
         </div>

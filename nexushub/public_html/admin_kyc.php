@@ -7,7 +7,7 @@ $alertMsg = "";
 // Handle Approve
 if (isset($_POST['action']) && $_POST['action'] === 'approve') {
     $target_uid = intval($_POST['uid']);
-    $stmt = $conn->prepare("UPDATE user_details SET kyc_status='Verified', kyc_rejection_reason=NULL WHERE id=?");
+    $stmt = $conn->prepare("UPDATE user_details SET kyc_status='Approved', kyc_rejection_reason=NULL WHERE id=?");
     if ($stmt) {
         $stmt->bind_param("i", $target_uid);
         if ($stmt->execute()) {
@@ -80,7 +80,7 @@ include 'admin_header.php';
                     <?php
                     $whereClause = "";
                     if ($statusFilter === 'pending') $whereClause = "WHERE kyc_status = 'Pending Approval'";
-                    elseif ($statusFilter === 'verified') $whereClause = "WHERE kyc_status = 'Verified'";
+                    elseif ($statusFilter === 'verified' || $statusFilter === 'approved') $whereClause = "WHERE kyc_status IN ('Verified', 'Approved')";
                     elseif ($statusFilter === 'rejected') $whereClause = "WHERE kyc_status = 'Rejected'";
 
                     $query = "SELECT * FROM user_details $whereClause ORDER BY (kyc_status = 'Pending Approval') DESC, id DESC";
@@ -126,8 +126,8 @@ include 'admin_header.php';
 
                         <td class="py-4 px-4">
                             <?php
-                            if ($kStat === 'Verified') {
-                                echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full flex items-center gap-1 w-max"><i class="fas fa-check-circle"></i> Verified</span>';
+                            if ($kStat === 'Verified' || $kStat === 'Approved') {
+                                echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full flex items-center gap-1 w-max"><i class="fas fa-check-circle"></i> Approved</span>';
                             } elseif ($kStat === 'Pending Approval') {
                                 echo '<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full flex items-center gap-1 w-max"><i class="fas fa-clock"></i> Pending Review</span>';
                             } elseif ($kStat === 'Rejected') {
@@ -151,7 +151,7 @@ include 'admin_header.php';
                                 <form method="post" action="" class="inline">
                                     <input type="hidden" name="action" value="approve">
                                     <input type="hidden" name="uid" value="<?php echo $uid; ?>">
-                                    <button type="submit" class="bg-green-500 hover:bg-green-400 text-black px-3 py-1.5 rounded-lg text-xs font-800 transition flex items-center gap-1" <?php echo ($kStat === 'Verified') ? 'disabled opacity-50 cursor-not-allowed' : ''; ?>>
+                                    <button type="submit" class="bg-green-500 hover:bg-green-400 text-black px-3 py-1.5 rounded-lg text-xs font-800 transition flex items-center gap-1" <?php echo ($kStat === 'Verified' || $kStat === 'Approved') ? 'disabled opacity-50 cursor-not-allowed' : ''; ?>>
                                         <i class="fas fa-check"></i> Approve
                                     </button>
                                 </form>

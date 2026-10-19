@@ -105,6 +105,7 @@ if ($kycQuery && $row = $kycQuery->fetch_assoc()) {
                     <tr class="border-b border-white/5 text-[10px] font-800 uppercase tracking-wider text-gray-500">
                         <th class="py-3 px-4">User</th>
                         <th class="py-3 px-4">Email</th>
+                        <th class="py-3 px-4">Connected Wallet</th>
                         <th class="py-3 px-4">KYC Status</th>
                     </tr>
                 </thead>
@@ -114,14 +115,24 @@ if ($kycQuery && $row = $kycQuery->fetch_assoc()) {
                     if ($uRes && $uRes->num_rows > 0):
                         while ($u = $uRes->fetch_assoc()):
                             $kStat = $u['kyc_status'] ?? 'Not Submitted';
+                            $wName = $u['wallet_name'] ?? '';
+                            $wAddr = $u['wallet_address'] ?? '';
                     ?>
                     <tr class="hover:bg-white/5 transition">
                         <td class="py-3.5 px-4 font-700 text-white"><?php echo htmlspecialchars($u['uname']); ?></td>
                         <td class="py-3.5 px-4 text-gray-400"><?php echo htmlspecialchars($u['uemail']); ?></td>
                         <td class="py-3.5 px-4">
+                            <?php if (!empty($wAddr)): ?>
+                                <span class="font-700 text-amber-400 block"><?php echo htmlspecialchars($wName ?: 'Wallet'); ?></span>
+                                <span class="font-mono text-[10px] text-gray-400" title="<?php echo htmlspecialchars($wAddr); ?>"><?php echo htmlspecialchars(substr($wAddr, 0, 6) . '...' . substr($wAddr, -4)); ?></span>
+                            <?php else: ?>
+                                <span class="text-gray-500 italic">None</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="py-3.5 px-4">
                             <?php
-                            if ($kStat === 'Verified') {
-                                echo '<span class="bg-green-500/10 text-green-400 text-[10px] font-800 px-2 py-0.5 rounded-full border border-green-500/30">Verified</span>';
+                            if ($kStat === 'Verified' || $kStat === 'Approved') {
+                                echo '<span class="bg-green-500/10 text-green-400 text-[10px] font-800 px-2 py-0.5 rounded-full border border-green-500/30">Approved</span>';
                             } elseif ($kStat === 'Pending Approval') {
                                 echo '<span class="bg-amber-500/10 text-amber-400 text-[10px] font-800 px-2 py-0.5 rounded-full border border-amber-500/30">Pending</span>';
                             } elseif ($kStat === 'Rejected') {
@@ -137,7 +148,7 @@ if ($kycQuery && $row = $kycQuery->fetch_assoc()) {
                     else:
                     ?>
                     <tr>
-                        <td colspan="3" class="py-6 text-center text-gray-500">No registered users found.</td>
+                        <td colspan="4" class="py-6 text-center text-gray-500">No registered users found.</td>
                     </tr>
                     <?php endif; ?>
                 </tbody>

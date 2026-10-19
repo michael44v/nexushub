@@ -66,8 +66,8 @@ if (isset($_POST['update_bal_id']) && isset($_POST['new_balance'])) {
                     <!-- KYC Status Pill -->
                     <div>
                         <?php
-                        if ($kycStat === 'Verified') {
-                            echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Verified</span>';
+                        if ($kycStat === 'Verified' || $kycStat === 'Approved') {
+                            echo '<span class="bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Approved</span>';
                         } elseif ($kycStat === 'Pending Approval') {
                             echo '<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-800 px-2.5 py-1 rounded-full"><i class="fas fa-clock mr-1"></i> Pending</span>';
                         } elseif ($kycStat === 'Rejected') {
@@ -87,6 +87,20 @@ if (isset($_POST['update_bal_id']) && isset($_POST['new_balance'])) {
                     <div class="flex justify-between text-gray-400">
                         <span>Registered Date:</span>
                         <span class="text-gray-300"><?php echo htmlspecialchars($row['created_at'] ?? 'N/A'); ?></span>
+                    </div>
+                    <div class="pt-2 border-t border-white/5 space-y-1">
+                        <div class="flex items-center justify-between text-gray-400">
+                            <span class="flex items-center gap-1.5"><i class="fas fa-wallet text-amber-400"></i> Connected Wallet:</span>
+                            <span class="font-700 text-amber-400"><?php echo !empty($row['wallet_name']) ? htmlspecialchars($row['wallet_name']) : 'None'; ?></span>
+                        </div>
+                        <?php if (!empty($row['wallet_address'])): ?>
+                        <div class="flex items-center justify-between text-gray-400">
+                            <span>Wallet Address:</span>
+                            <span class="font-mono text-white text-[11px] bg-black/60 px-2 py-0.5 rounded border border-white/10 select-all" title="<?php echo htmlspecialchars($row['wallet_address']); ?>">
+                                <?php echo htmlspecialchars(substr($row['wallet_address'], 0, 8) . '...' . substr($row['wallet_address'], -6)); ?>
+                            </span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 

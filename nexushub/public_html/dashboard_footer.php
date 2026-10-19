@@ -6,10 +6,7 @@
 <div id="mobile-overlay" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] hidden flex-col transition-all duration-300">
     <div class="flex justify-between items-center p-6 border-b border-white/10">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-gold rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                <i class="fas fa-chart-line text-black text-lg"></i>
-            </div>
-            <span class="font-syne text-xl font-800 gradient-text">NexusHub</span>
+            <img src="/images/logo.jpg" alt="Nexus" class="h-9 w-auto object-contain rounded-lg">
         </div>
         <button id="close-overlay" onclick="closeUserMenu();" class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer">
             <i class="fas fa-times text-lg pointer-events-none"></i>

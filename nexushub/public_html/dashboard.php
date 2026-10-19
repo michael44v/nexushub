@@ -111,13 +111,13 @@ include 'dashboard_header.php';
     ?>
     <div id="kyc-section" class="w-full max-w-full card-dark rounded-[2rem] p-5 sm:p-6 border transition-all overflow-hidden
         <?php
-        if ($kyc_status === 'Verified') echo 'border-green-500/30 bg-green-500/5';
+        if ($kyc_status === 'Verified' || $kyc_status === 'Approved') echo 'border-green-500/30 bg-green-500/5';
         elseif ($kyc_status === 'Pending Approval') echo 'border-amber-500/30 bg-amber-500/5';
         elseif ($kyc_status === 'Rejected') echo 'border-red-500/30 bg-red-500/5';
         else echo 'border-amber-500/20 bg-amber-500/5';
         ?>">
 
-        <?php if ($kyc_status === 'Verified'): ?>
+        <?php if ($kyc_status === 'Verified' || $kyc_status === 'Approved'): ?>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-2xl shrink-0">
@@ -125,12 +125,12 @@ include 'dashboard_header.php';
                     </div>
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="font-syne font-800 text-lg text-white">Identity Verified</h3>
+                            <h3 class="font-syne font-800 text-lg text-white">Identity Approved</h3>
                             <span class="bg-green-500 text-black text-[10px] font-900 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                                <i class="fas fa-check"></i> Verified
+                                <i class="fas fa-check"></i> Approved
                             </span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1 truncate">Your account is fully verified. Document: <span class="text-white font-600"><?php echo htmlspecialchars($loop['kyc_doc_type'] ?? 'ID'); ?></span></p>
+                        <p class="text-xs text-gray-400 mt-1 truncate">Your account is fully approved. Document: <span class="text-white font-600"><?php echo htmlspecialchars($loop['kyc_doc_type'] ?? 'ID'); ?></span></p>
                     </div>
                 </div>
                 <?php if (!empty($loop['kyc_doc_url'])): ?>
@@ -626,27 +626,27 @@ document.addEventListener('click', e => {
                 </div>
             </div>
 
-            <!-- TradingView Embed Placeholder -->
-            <div class="w-full max-w-full aspect-[16/9] bg-black/40 rounded-3xl border border-white/5 relative overflow-hidden flex items-center justify-center group cursor-pointer shadow-inner">
-                <div class="absolute inset-0 opacity-30 pointer-events-none transition-opacity group-hover:opacity-50">
-                    <svg viewBox="0 0 800 400" class="w-full h-full max-w-full">
-                        <path id="chart-path" d="M0 350 L50 320 L100 340 L150 280 L200 300 L250 220 L300 250 L350 180 L400 200 L450 120 L500 150 L550 80 L600 110 L650 40 L700 70 L750 20 L800 5 L800 400 L0 400 Z" fill="url(#chartGrad)"></path>
-                        <path id="chart-line" d="M0 350 L50 320 L100 340 L150 280 L200 300 L250 220 L300 250 L350 180 L400 200 L450 120 L500 150 L550 80 L600 110 L650 40 L700 70 L750 20 L800 5" fill="none" stroke="#f97316" stroke-width="2"></path>
-                        <defs>
-                            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#f97316" stop-opacity="0.6"/>
-                                <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-                <div class="relative z-10 text-center p-4">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-gold rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl shadow-orange-500/10 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-chart-line text-xl sm:text-2xl text-black"></i>
-                    </div>
-                    <p class="text-xs sm:text-sm font-700 text-white font-syne">Advanced Pro Chart</p>
-                    <p class="text-[9px] sm:text-[10px] text-gray-500 mt-1 uppercase tracking-widest font-700">Open Interactive Terminal</p>
-                </div>
+            <!-- Live TradingView Chart -->
+            <div class="tradingview-widget-container w-full h-[450px] rounded-3xl overflow-hidden border border-white/5">
+                <div id="tradingview_chart" class="w-full h-full"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                if (typeof TradingView !== 'undefined') {
+                    new TradingView.widget({
+                        "autosize": true,
+                        "symbol": "BINANCE:BTCUSDT",
+                        "interval": "D",
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#000000",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tradingview_chart"
+                    });
+                }
+                </script>
             </div>
         </div>
 
