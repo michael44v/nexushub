@@ -27,7 +27,7 @@ if ($conn->connect_error) {
                             'uname' => 'DemoTrader',
                             'uemail' => 'demotrader@nexushub.com',
                             'upass' => '123456',
-                            'kyc_status' => 'Verified',
+                            'kyc_status' => 'Not Submitted',
                             'kyc_doc_type' => 'Passport',
                             'kyc_doc_url' => 'https://res.cloudinary.com/dguvkirdr/image/upload/v1/sample.jpg',
                             'btc_bal' => '12500.00',
