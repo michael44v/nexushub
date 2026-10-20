@@ -1489,8 +1489,8 @@ initWebSocket();
     if (!toast || !text || !sub) return;
 
     const names   = ['Michael','Sarah','Enock','Joebat','Gabriella','Kidi','Adam','Lisa','James','Raj','Tommy','Ernesto'];
-    const actions = ['withdrew'];
-    const amounts = ['120k','350k','800k','100k','250k','500k','1M'];
+    const actions = ['withdrawal'];
+    const amounts = ['$120,000','$350,000','$800,000','$100,000','$250,000','$500,000','$1,000,000'];
     const timeAgo = ['Just now','2s ago','5s ago','12s ago','28s ago','45s ago','1 min ago'];
 
     let dismissed = false;
@@ -1503,12 +1503,12 @@ initWebSocket();
     function show() {
         if (dismissed) return;
         const name   = names[Math.floor(Math.random() * names.length)];
-        const action = 'withdrew';
+        const action = 'withdrawal';
         const amount = amounts[Math.floor(Math.random() * amounts.length)];
         const ago    = timeAgo[Math.floor(Math.random() * timeAgo.length)];
 
-        text.innerHTML  = name + ' ' + badge + ' ' + action + ' <strong>$' + amount + '</strong>';
-        sub.textContent = ago + ' · Community activity';
+        text.innerHTML  = name + ' ' + badge + ' ' + action + ' <strong>' + amount + '</strong>';
+        sub.textContent = ago + ' · BTC';
 
         toast.classList.add('show');
         hideTimer = setTimeout(function () { hide(); schedule(); }, 3500 + Math.random() * 2000);
