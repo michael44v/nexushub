@@ -1482,6 +1482,8 @@ initWebSocket();
 
 // ── NOTIFICATIONS (single, self-contained loop) ──────────────────
 (function () {
+    if (window.__notifToastInitialized) return;
+    window.__notifToastInitialized = true;
     const toast    = document.getElementById('notification-toast');
     const text     = document.getElementById('notif-text');
     const sub      = document.getElementById('notif-sub');

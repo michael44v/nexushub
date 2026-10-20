@@ -113,4 +113,5 @@
 <!--<a href="https://api.whatsapp.com/send?phone=+85259970400&text=Hello Admin, i am from Virtual-Sync, my name is _____" class="float" target="_blank">
     <i class="fab fa-whatsapp my-float"></i>
 </a>-->
+<?php include_once __DIR__ . '/notif_popup.php'; ?>
 
