@@ -4,9 +4,10 @@ include 'config.php';
 $usr_string = $req;
 
 // Remove all non-digit characters to get user ID
-$numbers = preg_replace('/\D/', '', $req);
+$numbers = preg_replace('/\D/', '', substr($req, 3));
 
-$chk = $conn->query("select * from user_details where id='$numbers' OR uid='$numbers'");
+
+$chk = $conn->query("select * from user_details where id='$numbers'");
 if (!$chk || $chk->num_rows == 0) {
     // Fallback if queried by legacy id column or empty
     $chk = $conn->query("select * from user_details limit 1");
@@ -27,10 +28,10 @@ $uid = isset($loop['id']) ? $loop['id'] : 1;
 $u = isset($loop['uid']) ? $loop['uid'] : $numbers;
 
 // Ensure balance exists
-$bl_check = $conn->query("select * from bal where uid='$uid' OR uid='$u'");
+$bl_check = $conn->query("select * from bal where id='$numbers'");
 if (!$bl_check || $bl_check->num_rows < 1) {
     $conn->query("insert into bal(uid,bal) values('$uid','0.00')");
-    $bl_check = $conn->query("select * from bal where uid='$uid' OR uid='$u'");
+    $bl_check = $conn->query("select * from bal where id='$numbers'");
 }
 $itr = $bl_check ? $bl_check->fetch_assoc() : ['bal' => 0];
 
@@ -39,15 +40,17 @@ if (isset($_POST['action']) && $_POST['action'] === 'submit_kyc') {
     $doc_type = filter($_POST['kyc_doc_type']);
     $doc_url  = filter($_POST['kyc_doc_url']);
     if (!empty($doc_url)) {
-        $stmt = $conn->prepare("UPDATE user_details SET kyc_status='Pending Approval', kyc_doc_type=?, kyc_doc_url=?, kyc_submitted_at=NOW(), kyc_rejection_reason=NULL WHERE id=? OR uid=?");
+        $stmt = $conn->prepare("UPDATE user_details SET kyc_status='Pending Approval', kyc_doc_type=?, kyc_doc_url=?, kyc_submitted_at=NOW(), kyc_rejection_reason=NULL WHERE id=?");
         if ($stmt) {
-            $stmt->bind_param("ssis", $doc_type, $doc_url, $uid, $u);
+            $stmt->bind_param("ssi", $doc_type, $doc_url, $uid);
             $stmt->execute();
 
             // Reload updated user details
-            $ref = $conn->query("select * from user_details where id='$uid' OR uid='$u'");
+            $ref = $conn->query("select * from user_details where id='$numbers'");
             if ($ref && $ref->num_rows > 0) {
                 $loop = $ref->fetch_assoc();
+                
+                
             }
         }
     }
@@ -108,6 +111,8 @@ include 'dashboard_header.php';
     <!-- KYC Verification Status Card -->
     <?php
     $kyc_status = isset($loop['kyc_status']) ? $loop['kyc_status'] : 'Not Submitted';
+    
+   
     ?>
     <div id="kyc-section" class="w-full max-w-full card-dark rounded-[2rem] p-5 sm:p-6 border transition-all overflow-hidden
         <?php
