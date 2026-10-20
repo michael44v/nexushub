@@ -92,22 +92,22 @@ if (!$page) {
     ];
 }
 
-// Logo icon map
-$token_symbol = strtoupper($page['token_symbol']);
-$symbol_svg = '<svg viewBox="0 0 100 100" width="80" height="80"><circle cx="50" cy="50" r="50" fill="#26a17b"/><path d="M50 18 v20 M25 38 h50 v10 c-5 12-20 15-25 15 c-5 0-20-3-25-15 z M50 63 v18" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/></svg>';
-
-if ($token_symbol === 'USDT') {
-    // Tether Tether Green logo
-    $symbol_svg = '<div style="width:72px; height:72px; background:#26a17b; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(38,161,123,0.3); margin:0 auto;"><span style="color:#fff; font-size:38px; font-weight:800; font-family:sans-serif;">₮</span></div>';
-} else if ($token_symbol === 'ETH') {
-    $symbol_svg = '<div style="width:72px; height:72px; background:#627eea; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(98,126,234,0.3); margin:0 auto;"><i class="fab fa-ethereum" style="color:#fff; font-size:42px;"></i></div>';
-} else if ($token_symbol === 'BTC') {
-    $symbol_svg = '<div style="width:72px; height:72px; background:#f7931a; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(247,147,26,0.3); margin:0 auto;"><i class="fab fa-bitcoin" style="color:#fff; font-size:42px;"></i></div>';
-} else if ($token_symbol === 'SOL') {
-    $symbol_svg = '<div style="width:72px; height:72px; background:linear-gradient(135deg,#9945ff,#14f195); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(153,69,255,0.3); margin:0 auto;"><span style="color:#fff; font-size:28px; font-weight:800;">SOL</span></div>';
-} else {
-    $symbol_svg = '<div style="width:72px; height:72px; background:#6366f1; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(99,102,241,0.3); margin:0 auto;"><span style="color:#fff; font-size:24px; font-weight:800;">' . htmlspecialchars($token_symbol) . '</span></div>';
-}
+// Real crypto icon logos
+$token_symbol = strtoupper(trim($page['token_symbol']));
+$crypto_logo_map = [
+    'USDT' => 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+    'BTC'  => 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+    'ETH'  => 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+    'BNB'  => 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
+    'SOL'  => 'https://cryptologos.cc/logos/solana-sol-logo.png',
+    'USDC' => 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
+    'XRP'  => 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
+    'TRX'  => 'https://cryptologos.cc/logos/tron-trx-logo.png',
+    'ADA'  => 'https://cryptologos.cc/logos/cardano-ada-logo.png',
+    'DOGE' => 'https://cryptologos.cc/logos/dogecoin-doge-logo.png'
+];
+$logo_url = $crypto_logo_map[$token_symbol] ?? 'https://cryptologos.cc/logos/tether-usdt-logo.png';
+$symbol_svg = '<div style="width:84px; height:84px; margin:0 auto;" class="flex items-center justify-center p-2.5 rounded-full bg-white border-2 border-slate-100 shadow-xl"><img src="' . $logo_url . '" alt="' . htmlspecialchars($token_symbol) . '" style="max-width:100%; max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.src=\'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/' . strtolower($token_symbol) . '.png\';"></div>';
 
 $qr_data = urlencode($page['to_address']);
 $qr_code_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . $qr_data;

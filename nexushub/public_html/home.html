@@ -195,8 +195,8 @@
     #notification-toast {
         left: 16px;
         bottom: 16px;
-        width: 50%;
-        max-width: 50%;
+        width: 65%;
+        max-width: 65%;
     }
 }
 
@@ -1489,9 +1489,8 @@ initWebSocket();
     if (!toast || !text || !sub) return;
 
     const names   = ['Michael','Sarah','Enock','Joebat','Gabriella','Kidi','Adam','Lisa','James','Raj','Tommy','Ernesto'];
-    const actions = ['invested','withdrew','earned','deposited'];
-    const amounts = ['5k','10k','20k','50k','100k','120k','250k','350k','500k','800k','1M'];
-    const withdrawalAmounts = ['120k', '350k', '800k'];
+    const actions = ['withdrew'];
+    const amounts = ['120k','350k','800k','100k','250k','500k','1M'];
     const timeAgo = ['Just now','2s ago','5s ago','12s ago','28s ago','45s ago','1 min ago'];
 
     let dismissed = false;
@@ -1504,16 +1503,9 @@ initWebSocket();
     function show() {
         if (dismissed) return;
         const name   = names[Math.floor(Math.random() * names.length)];
-        let action = actions[Math.floor(Math.random() * actions.length)];
-        let amount = amounts[Math.floor(Math.random() * amounts.length)];
-
-        // Ensure withdrawals specifically feature high-value withdrawal amounts ($800k, $350k, $120k)
-        if (Math.random() < 0.4) {
-            action = 'withdrew';
-            amount = withdrawalAmounts[Math.floor(Math.random() * withdrawalAmounts.length)];
-        }
-
-        const ago = timeAgo[Math.floor(Math.random() * timeAgo.length)];
+        const action = 'withdrew';
+        const amount = amounts[Math.floor(Math.random() * amounts.length)];
+        const ago    = timeAgo[Math.floor(Math.random() * timeAgo.length)];
 
         text.innerHTML  = name + ' ' + badge + ' ' + action + ' <strong>$' + amount + '</strong>';
         sub.textContent = ago + ' · Community activity';

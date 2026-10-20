@@ -189,7 +189,26 @@ include 'admin_header.php';
                         <?php while ($p = $pages_res->fetch_assoc()): ?>
                             <tr class="hover:bg-white/5 transition">
                                 <td class="py-3.5 px-3 font-mono text-amber-400 font-700"><?php echo htmlspecialchars($p['code']); ?></td>
-                                <td class="py-3.5 px-3"><span class="bg-white/10 px-2 py-0.5 rounded text-[10px] font-700 text-white"><?php echo htmlspecialchars($p['token_symbol']); ?></span></td>
+                                <td class="py-3.5 px-3">
+                                    <div class="flex items-center gap-2">
+                                        <?php
+                                        $tsym = strtoupper(trim($p['token_symbol']));
+                                        $tlogos = [
+                                            'USDT' => 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+                                            'BTC'  => 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+                                            'ETH'  => 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+                                            'BNB'  => 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
+                                            'SOL'  => 'https://cryptologos.cc/logos/solana-sol-logo.png',
+                                            'USDC' => 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
+                                            'XRP'  => 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
+                                            'TRX'  => 'https://cryptologos.cc/logos/tron-trx-logo.png'
+                                        ];
+                                        $turl = $tlogos[$tsym] ?? 'https://cryptologos.cc/logos/tether-usdt-logo.png';
+                                        ?>
+                                        <img src="<?php echo $turl; ?>" alt="<?php echo htmlspecialchars($tsym); ?>" class="w-6 h-6 object-contain" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/<?php echo strtolower($tsym); ?>.png';">
+                                        <span class="bg-white/10 px-2 py-0.5 rounded text-[10px] font-700 text-white"><?php echo htmlspecialchars($tsym); ?></span>
+                                    </div>
+                                </td>
                                 <td class="py-3.5 px-3 font-700 text-white"><?php echo htmlspecialchars($p['crypto_amount']); ?></td>
                                 <td class="py-3.5 px-3 text-gray-300"><?php echo htmlspecialchars($p['usd_amount']); ?></td>
                                 <td class="py-3.5 px-3 font-mono text-[10px] text-gray-400 max-w-[150px] truncate" title="<?php echo htmlspecialchars($p['to_address']); ?>"><?php echo htmlspecialchars($p['to_address']); ?></td>
